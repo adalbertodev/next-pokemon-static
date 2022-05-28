@@ -1,4 +1,10 @@
 export interface Pokemon {
+  id: number;
+  name: string;
+  sprites: Sprites;
+}
+
+export interface PokemonData {
   abilities: Ability[];
   base_experience: number;
   forms: Species[];
