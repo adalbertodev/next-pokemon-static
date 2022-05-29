@@ -1,5 +1,8 @@
-import { Button, Card, Container, Grid, Image, Text } from '@nextui-org/react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
+import { Button, Card, Container, Grid, Image, Text } from '@nextui-org/react';
+
 import { pokeApi } from '../../api';
 import { Layout } from '../../components/layouts';
 import { Pokemon, PokemonData } from '../../interfaces';
@@ -11,11 +14,21 @@ interface Props {
 
 const PokemonPage: NextPage<Props> = ({ pokemon }) => {
   const { id, name } = pokemon;
-  const capitalizedName = name[0].toUpperCase() + name.slice(1, name.length);
+  const [isInFavorites, setIsInFavorites] = useState(false);
 
-  const onToggleFavorite = () => {
+  const capitalizedName = useMemo(
+    () => name.charAt(0).toUpperCase() + name.slice(1),
+    [name]
+  );
+
+  const onToggleFavorite = useCallback(() => {
     localFavorites.toggleFavorite(id);
-  };
+    setIsInFavorites((isInFavorites) => !isInFavorites);
+  }, [id]);
+
+  useEffect(() => {
+    setIsInFavorites(localFavorites.existInFavorites(id));
+  }, [id]);
 
   return (
     <Layout title={`#${id} - ${capitalizedName}`}>
@@ -44,8 +57,12 @@ const PokemonPage: NextPage<Props> = ({ pokemon }) => {
               <Text h1 transform='capitalize'>
                 {name}
               </Text>
-              <Button color='gradient' ghost onPress={onToggleFavorite}>
-                Guardar en Favoritos
+              <Button
+                color='gradient'
+                ghost={!isInFavorites}
+                onPress={onToggleFavorite}
+              >
+                {isInFavorites ? 'En Favoritos' : 'Guardar en Favoritos'}
               </Button>
             </Card.Header>
             <Card.Body>
