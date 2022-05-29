@@ -3,16 +3,22 @@ import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { pokeApi } from '../../api';
 import { Layout } from '../../components/layouts';
 import { Pokemon, PokemonData } from '../../interfaces';
+import { localFavorites } from '../../utils';
 
 interface Props {
   pokemon: Pokemon;
 }
 
 const PokemonPage: NextPage<Props> = ({ pokemon }) => {
-  const { name } = pokemon;
+  const { id, name } = pokemon;
+  const capitalizedName = name[0].toUpperCase() + name.slice(1, name.length);
+
+  const onToggleFavorite = () => {
+    localFavorites.toggleFavorite(id);
+  };
 
   return (
-    <Layout title='Algún Pokémon'>
+    <Layout title={`#${id} - ${capitalizedName}`}>
       <Grid.Container css={{ marginTop: '5px' }} gap={2}>
         <Grid xs={12} sm={4}>
           <Card hoverable css={{ padding: '30px' }}>
@@ -38,7 +44,7 @@ const PokemonPage: NextPage<Props> = ({ pokemon }) => {
               <Text h1 transform='capitalize'>
                 {name}
               </Text>
-              <Button color='gradient' ghost>
+              <Button color='gradient' ghost onPress={onToggleFavorite}>
                 Guardar en Favoritos
               </Button>
             </Card.Header>

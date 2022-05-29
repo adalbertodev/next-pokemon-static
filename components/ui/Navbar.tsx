@@ -14,7 +14,7 @@ export const Navbar = () => {
         alignItems: 'center',
         justifyContent: 'start',
         padding: '0rem 1.25rem',
-        backgroundColor: theme?.colors.gray900.value || 'red'
+        backgroundColor: theme?.colors.gray50.value || 'black'
       }}
     >
       <Image
