@@ -18,7 +18,7 @@ export const FavoriteCardPokemon: FC<Props> = ({ pokemonId }) => {
       <Card
         hoverable
         clickable
-        css={{ padding: 10 }}
+        css={{ padding: 10, paddingTop: '1.5vh' }}
         onClick={onFavoriteClicked}
       >
         <Card.Image
