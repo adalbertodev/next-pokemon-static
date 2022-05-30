@@ -5,7 +5,9 @@ import confetti from 'canvas-confetti';
 
 import { getPokemonInfo, localFavorites } from '../../utils';
 import { Layout } from '../../components/layouts';
-import { Pokemon } from '../../interfaces';
+import { Pokemon, PokemonListResponse } from '../../interfaces';
+import { pokeApi } from '../../api';
+import { isNumber } from '../../utils/isNumber';
 
 interface Props {
   pokemon: Pokemon;
@@ -114,25 +116,34 @@ const PokemonPage: NextPage<Props> = ({ pokemon }) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async (ctx) => {
-  const pokemons151 = [...Array(151)].map((value, i) => `${i + 1}`);
+  const { data } = await pokeApi.get<PokemonListResponse>(`/pokemon?limit=151`);
 
   return {
-    paths: pokemons151.map((id) => ({
-      params: { id }
+    paths: data.results.map(({ name }) => ({
+      params: { name }
     })),
     fallback: 'blocking'
   };
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const { id } = params as { id: string };
+  const { name } = params as { name: string };
 
-  const pokemon = await getPokemonInfo(id);
+  const pokemon = await getPokemonInfo(name);
 
   if (!pokemon) {
     return {
       redirect: {
         destination: '/',
+        permanent: false
+      }
+    };
+  }
+
+  if (isNumber(name)) {
+    return {
+      redirect: {
+        destination: `/pokemon/${pokemon.name}`,
         permanent: false
       }
     };
