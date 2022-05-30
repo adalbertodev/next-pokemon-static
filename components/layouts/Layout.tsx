@@ -10,6 +10,8 @@ interface Props {
 const origin = typeof window === 'undefined' ? '' : window.location.origin;
 
 export const Layout: FC<Props> = ({ children, title }) => {
+  const name = title?.split('- ')[1].toLowerCase();
+
   return (
     <>
       <Head>
@@ -17,13 +19,13 @@ export const Layout: FC<Props> = ({ children, title }) => {
         <meta name='author' content='Adalberto' />
         <meta
           name='description'
-          content={`Información sobre el pokémon ${title}`}
+          content={`Información sobre el pokémon ${name}`}
         />
-        <meta name='keywords' content={`${title}, pokemon, pokedex`} />
-        <meta property='og:title' content={`Información sobre ${title}`} />
+        <meta name='keywords' content={`${name}, pokemon, pokedex`} />
+        <meta property='og:title' content={`Información sobre ${name}`} />
         <meta
           property='og:description'
-          content={`Esta es la página sobre ${title}`}
+          content={`Esta es la página sobre ${name}`}
         />
         <meta property='og:image' content={`${origin}/img/banner.png`} />
       </Head>
