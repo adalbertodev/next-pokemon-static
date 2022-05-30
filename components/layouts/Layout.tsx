@@ -10,7 +10,7 @@ interface Props {
 const origin = typeof window === 'undefined' ? '' : window.location.origin;
 
 export const Layout: FC<Props> = ({ children, title }) => {
-  const name = title?.split('- ')[1]?.toLowerCase();
+  const name = title?.split('- ')[1];
 
   return (
     <>
