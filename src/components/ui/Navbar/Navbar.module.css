@@ -1,0 +1,21 @@
+.container {
+	align-items: center;
+	background-color: var(--background-navbar);
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	padding: 0 var(--nextui-space-9);
+	width: 100%;
+}
+
+.title {
+	align-items: center;
+	display: flex;
+	flex-direction: row;
+	font-size: var(--nextui-fontSizes-3xl);
+	margin: 0;
+}
+
+.title span {
+	font-size: var(--nextui-fontSizes-4xl);
+}

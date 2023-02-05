@@ -1,13 +1,13 @@
 h1 {
-	font-size: 2.35em;
+	font-size: 3em;
 }
 
 h2 {
-	font-size: 2em;
+	font-size: 2.25em;
 }
 
 h3 {
-	font-size: 1.75em;
+	font-size: 1.875em;
 }
 
 h4 {
@@ -19,5 +19,5 @@ h5 {
 }
 
 h6 {
-	font-size: 1em;
+	font-size: 1.125em;
 }
