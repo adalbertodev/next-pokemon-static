@@ -29,6 +29,7 @@
 
 - [Next.js](https://nextjs.org)
 - [TypeScript](https://www.typescriptlang.org)
+- [NextUI](https://nextui.org)
 - [ESLint](https://eslint.org) and [Prettier](https://prettier.io) already configured with the [🤏 Codely's configuration](https://github.com/CodelyTV/eslint-config-codely)
 - [Jest](https://jestjs.io) with [React Testing Library](https://testing-library.com/docs/react-testing-library/intro) for the unit tests
 - [Cypress](https://www.cypress.io) with [Testing Library](https://testing-library.com/docs/cypress-testing-library) for the end-to-end tests
