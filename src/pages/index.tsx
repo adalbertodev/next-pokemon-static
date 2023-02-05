@@ -1,6 +1,7 @@
 import { NextPage } from "next";
 
-import { Home, Layout } from "@/components/ui";
+import { Home } from "@/components/pages/Home";
+import { Layout } from "@/components/ui/templates";
 
 const HomePage: NextPage = () => {
 	return (
