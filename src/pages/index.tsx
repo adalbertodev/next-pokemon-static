@@ -1,14 +1,32 @@
-import { NextPage } from "next";
+import { GetStaticProps, GetStaticPropsContext, NextPage } from "next";
 
-import { Home } from "@/components/pages/Home";
 import { Layout } from "@/components/ui/templates";
+import { PokeApiPokemonListRepository, PokemonItem } from "@/sections/PokemonList";
 
-const HomePage: NextPage = () => {
+interface Props {
+	pokemons: PokemonItem[];
+}
+
+const HomePage: NextPage<Props> = ({ pokemons }) => {
 	return (
 		<Layout title="Pokedex">
-			<Home />
+			<ul>
+				{pokemons.map(({ id, name }) => (
+					<li key={id}>{`#${id} - ${name}`}</li>
+				))}
+			</ul>
 		</Layout>
 	);
+};
+
+export const getStaticProps: GetStaticProps = async (_: GetStaticPropsContext) => {
+	const pokemonList = await new PokeApiPokemonListRepository().searchWithLimitBy(151);
+
+	return {
+		props: {
+			pokemons: pokemonList.pokemons,
+		},
+	};
 };
 
 export default HomePage;
