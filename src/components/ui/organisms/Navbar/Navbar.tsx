@@ -1,19 +1,23 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import styles from "./Navbar.module.css";
 
 export const Navbar = () => {
 	return (
 		<div className={styles.container}>
-			<h1 className={styles.title}>
+			<Link href="/" className={styles.title}>
 				<Image
-					src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png"
+					src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/132.gif"
 					alt="Icono de la aplicacioón"
-					width={70}
-					height={70}
+					width={32}
+					height={32}
 				/>
-				<span>P</span>okédex
-			</h1>
+
+				<h1>
+					<span>P</span>okédex
+				</h1>
+			</Link>
 
 			<p>Favoritos</p>
 		</div>

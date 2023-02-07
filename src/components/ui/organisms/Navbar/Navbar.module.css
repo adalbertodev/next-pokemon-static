@@ -4,18 +4,23 @@
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-	padding: 0 var(--nextui-space-9);
+	padding: 0 var(--nextui-space-15);
 	width: 100%;
+	height: 70px;
 }
 
 .title {
 	align-items: center;
 	display: flex;
 	flex-direction: row;
+	gap: var(--nextui-space-2);
+}
+
+.title h1 {
 	font-size: var(--nextui-fontSizes-3xl);
 	margin: 0;
 }
 
-.title span {
+.title h1 > span {
 	font-size: var(--nextui-fontSizes-4xl);
 }
