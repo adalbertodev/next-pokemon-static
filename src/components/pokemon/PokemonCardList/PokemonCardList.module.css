@@ -1,0 +1,7 @@
+.container {
+	--nextui--gridGapUnit: calc(2 * var(--nextui-space-3));
+
+	width: 100%;
+	margin: 0;
+	justify-content: flex-start;
+}

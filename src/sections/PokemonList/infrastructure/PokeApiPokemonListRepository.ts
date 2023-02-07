@@ -1,4 +1,4 @@
-import { PokeApiPokemonRepository } from "@/sections/Pokemon";
+import { PokeApiPokemon } from "@/sections/Pokemon";
 
 import { PokemonItem, PokemonList, PokemonListRepository } from "../domain";
 import { PokeApiPokemonList } from "./PokeApiPokemonList";
@@ -13,24 +13,24 @@ export class PokeApiPokemonListRepository implements PokemonListRepository {
 
 		const pokemons: PokemonItem[] = await Promise.all(
 			pokeApiPokemonList.results.map(async (result) => {
-				const pokemon = await new PokeApiPokemonRepository().searchByName(result.name);
-
-				return {
-					name: result.name,
-					url: result.url,
-					id: pokemon.id,
-					img:
-						pokemon.sprites.default ??
-						pokemon.sprites.versions["generation-viii"].icons.front_default ??
-						pokemon.sprites.versions["generation-vii"].icons.front_default ??
-						pokemon.sprites.versions["generation-vi"]["omegaruby-alphasapphire"].front_default ??
-						pokemon.sprites.versions["generation-v"]["black-white"].front_default ??
-						pokemon.sprites.versions["generation-iv"].platinum.front_default ??
-						pokemon.sprites.versions["generation-iii"].emerald.front_default ??
-						pokemon.sprites.versions["generation-ii"].crystal.front_default ??
-						pokemon.sprites.versions["generation-i"].yellow.front_default ??
-						"",
-				};
+				return fetch(result.url)
+					.then<PokeApiPokemon>((response) => response.json())
+					.then((response) => ({
+						name: result.name,
+						url: result.url,
+						id: response.id,
+						img:
+							response.sprites.other?.dream_world.front_default ??
+							response.sprites.versions["generation-viii"].icons.front_default ??
+							response.sprites.versions["generation-vii"].icons.front_default ??
+							response.sprites.versions["generation-vi"]["omegaruby-alphasapphire"].front_default ??
+							response.sprites.versions["generation-v"]["black-white"].front_default ??
+							response.sprites.versions["generation-iv"].platinum.front_default ??
+							response.sprites.versions["generation-iii"].emerald.front_default ??
+							response.sprites.versions["generation-ii"].crystal.front_default ??
+							response.sprites.versions["generation-i"].yellow.front_default ??
+							"",
+					}));
 			})
 		);
 

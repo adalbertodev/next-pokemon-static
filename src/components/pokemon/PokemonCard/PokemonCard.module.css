@@ -1,0 +1,45 @@
+.container {
+	flex-grow: 0;
+	display: inherit;
+	max-width: 50%;
+	flex-basis: 50%;
+}
+
+.card__body {
+	padding: var(--nextui-space-1);
+	padding-top: var(--nextui-space-7);
+}
+
+.card__image {
+	width: 100%;
+	height: 140px;
+}
+
+.card__footer {
+	justify-content: space-between;
+}
+
+.card__footer p {
+	text-transform: capitalize;
+}
+
+@media (min-width: 960px) {
+	.container {
+		max-width: 33.33334%;
+		flex-basis: 33.33334%;
+	}
+}
+
+@media (min-width: 1280px) {
+	.container {
+		max-width: 16.66667%;
+		flex-basis: 16.66667%;
+	}
+}
+
+@media (min-width: 1920px) {
+	.container {
+		max-width: 11.11112%;
+		flex-basis: 11.11112%;
+	}
+}
