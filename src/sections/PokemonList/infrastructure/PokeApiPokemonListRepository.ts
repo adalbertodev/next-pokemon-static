@@ -17,7 +17,6 @@ export class PokeApiPokemonListRepository implements PokemonListRepository {
 					.then<PokeApiPokemon>((response) => response.json())
 					.then((response) => ({
 						name: result.name,
-						url: result.url,
 						id: response.id,
 						img:
 							response.sprites.other?.dream_world.front_default ??

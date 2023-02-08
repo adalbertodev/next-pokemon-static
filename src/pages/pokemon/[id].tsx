@@ -1,14 +1,10 @@
-import {
-	GetStaticPaths,
-	GetStaticPathsContext,
-	GetStaticProps,
-	GetStaticPropsContext,
-	NextPage,
-} from "next";
+import { GetStaticPaths, GetStaticProps, GetStaticPropsContext, NextPage } from "next";
 import { ParsedUrlQuery } from "querystring";
 
+import { PokemonInfo } from "@/components/pokemon";
 import { Layout } from "@/components/ui/templates";
 import { PokeApiPokemonRepository, Pokemon } from "@/sections/Pokemon";
+import { capitalize } from "@/utils";
 
 interface Props {
 	pokemon: Pokemon;
@@ -16,15 +12,17 @@ interface Props {
 
 export const PokemonPage: NextPage<Props> = ({ pokemon }) => {
 	return (
-		<Layout title="Bulbasaur | Pokédex">
-			<h1>
-				#{pokemon.id} - {pokemon.name}
-			</h1>
+		<Layout title={`${capitalize(pokemon.name)} | Pokédex`}>
+			<PokemonInfo pokemon={pokemon} />
 		</Layout>
 	);
 };
 
-export const getStaticPaths: GetStaticPaths = (_: GetStaticPathsContext) => {
+interface Params extends ParsedUrlQuery {
+	id: string;
+}
+
+export const getStaticPaths: GetStaticPaths<Params> = () => {
 	const defaultPokemonIds = Array.from({ length: 151 }, (_, index) => `${index + 1}`);
 
 	return {
@@ -34,10 +32,6 @@ export const getStaticPaths: GetStaticPaths = (_: GetStaticPathsContext) => {
 		fallback: false,
 	};
 };
-
-interface Params extends ParsedUrlQuery {
-	id: string;
-}
 
 export const getStaticProps: GetStaticProps<Props, Params> = async ({
 	params,

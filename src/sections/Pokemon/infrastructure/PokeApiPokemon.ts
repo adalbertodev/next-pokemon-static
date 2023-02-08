@@ -30,7 +30,7 @@ interface PokemonMoveVersion {
 	version_group: NamedApiResource;
 }
 
-interface PokemonMove {
+export interface PokemonMove {
 	move: NamedApiResource;
 	version_group_details: PokemonMoveVersion[];
 }

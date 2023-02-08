@@ -180,32 +180,6 @@ interface GenerationVISprites {
 	"x-y": XY;
 }
 
-interface GenerationViiIcons {
-	front_default: string | null;
-	front_female: string | null;
-}
-
-interface UltraSunUltraMoon {
-	front_default: string | null;
-	front_female: string | null;
-	front_shiny: string | null;
-	front_shiny_female: string | null;
-}
-
-interface GenerationVIISprites {
-	icons: GenerationViiIcons;
-	"ultra-sun-ultra-moon": UltraSunUltraMoon;
-}
-
-interface GenerationViiiIcons {
-	front_default: string | null;
-	front_female: string | null;
-}
-
-interface GenerationVIIISprites {
-	icons: GenerationViiiIcons;
-}
-
 interface VersionSprites {
 	"generation-i": GenerationISprites;
 	"generation-ii": GenerationIISprites;
@@ -213,8 +187,6 @@ interface VersionSprites {
 	"generation-iv": GenerationIVSprites;
 	"generation-v": GenerationVSprites;
 	"generation-vi": GenerationVISprites;
-	"generation-vii": GenerationVIISprites;
-	"generation-viii": GenerationVIIISprites;
 }
 
 interface PokemonSprites {
@@ -231,17 +203,13 @@ interface PokemonStat {
 export interface Pokemon {
 	id: number;
 	name: string;
-
 	weight: number;
 	height: number;
 
-	abilities: PokemonAbility[];
 	types: string[];
+	abilities: PokemonAbility[];
 
-	base_experience: number;
-	held_items: string[];
-	location_area_encounters: string;
 	moves: PokemonMove[];
-	sprites: PokemonSprites;
 	stats: PokemonStat[];
+	sprites: PokemonSprites;
 }

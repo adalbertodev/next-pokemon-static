@@ -1,35 +1,65 @@
-import { Card, Grid } from "@nextui-org/react";
 import { useRouter } from "next/router";
-import { FC, useCallback } from "react";
+import { FC, useCallback, useMemo } from "react";
 
 import { PokemonItem } from "@/sections/PokemonList";
 
-import styles from "./PokemonCard.module.css";
+import { Card, CardBody, CardFooter, CardImage, CardName } from "./PokemonCard.styles";
+
+interface VariantProps {
+	pokemon: PokemonItem;
+	onClick: () => void;
+}
+
+const DefaultPokemonCard: FC<VariantProps> = ({ pokemon, onClick }) => {
+	return (
+		<Card variant="default" onClick={onClick}>
+			<CardBody>
+				<CardImage src={pokemon.img} alt={pokemon.name} variant="default" />
+			</CardBody>
+		</Card>
+	);
+};
+
+const WithNamePokemonCard: FC<VariantProps> = ({ pokemon, onClick }) => {
+	return (
+		<Card variant="withName" onClick={onClick}>
+			<CardBody>
+				<CardImage src={pokemon.img} alt={pokemon.name} variant="withName" />
+			</CardBody>
+
+			<CardFooter>
+				<p>#{pokemon.id}</p>
+
+				<CardName>{pokemon.name}</CardName>
+			</CardFooter>
+		</Card>
+	);
+};
 
 interface Props {
 	pokemon: PokemonItem;
+
+	variant?: "default" | "withName";
 }
 
-export const PokemonCard: FC<Props> = ({ pokemon }) => {
+export const PokemonCard: FC<Props> = ({ pokemon, variant = "default" }) => {
 	const router = useRouter();
 
 	const onPokemonCardClick = useCallback(() => {
 		router.push(`/pokemon/${pokemon.id}`).catch((error) => console.error(error));
 	}, [pokemon.id, router]);
 
-	return (
-		<Grid className={styles.container}>
-			<Card isHoverable isPressable onClick={onPokemonCardClick}>
-				<Card.Body className={styles.card__body}>
-					<Card.Image src={pokemon.img} alt={pokemon.name} className={styles.card__image} />
-				</Card.Body>
-
-				<Card.Footer className={styles.card__footer}>
-					<p>{pokemon.name}</p>
-
-					<p>#{pokemon.id}</p>
-				</Card.Footer>
-			</Card>
-		</Grid>
+	const variantProps: VariantProps = useMemo(
+		() => ({
+			pokemon,
+			onClick: onPokemonCardClick,
+		}),
+		[onPokemonCardClick, pokemon]
 	);
+
+	if (variant === "withName") {
+		return <WithNamePokemonCard {...variantProps} />;
+	}
+
+	return <DefaultPokemonCard {...variantProps} />;
 };

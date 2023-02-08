@@ -1,5 +1,5 @@
 import { Pokemon, PokemonRepository } from "../domain";
-import { PokeApiPokemon } from "./PokeApiPokemon";
+import { PokeApiPokemon, PokemonMove } from "./PokeApiPokemon";
 
 export class PokeApiPokemonRepository implements PokemonRepository {
 	private readonly pokemonEndpoint = "https://pokeapi.co/api/v2/pokemon/$id";
@@ -22,16 +22,18 @@ export class PokeApiPokemonRepository implements PokemonRepository {
 
 	private readonly pokeApiToApp = (pokeApiPokemon: PokeApiPokemon): Pokemon => {
 		return {
+			id: pokeApiPokemon.id,
+			name: pokeApiPokemon.name,
+			weight: pokeApiPokemon.weight,
+			height: pokeApiPokemon.height,
+
+			types: pokeApiPokemon.types.map((type) => type.type.name),
 			abilities: pokeApiPokemon.abilities.map((ability) => ({
 				name: ability.ability.name,
 				is_hidden: ability.is_hidden,
 			})),
-			base_experience: pokeApiPokemon.base_experience,
-			height: pokeApiPokemon.height,
-			held_items: pokeApiPokemon.held_items.map((heldItem) => heldItem.item.name),
-			id: pokeApiPokemon.id,
-			location_area_encounters: pokeApiPokemon.location_area_encounters,
-			moves: pokeApiPokemon.moves.map((move) => ({
+
+			moves: this.filterMovesByVersion(pokeApiPokemon.moves).map((move) => ({
 				name: move.move.name,
 				details: move.version_group_details.map((details) => ({
 					level_learned_at: details.level_learned_at,
@@ -39,18 +41,38 @@ export class PokeApiPokemonRepository implements PokemonRepository {
 					version: details.version_group.name,
 				})),
 			})),
-			name: pokeApiPokemon.name,
-			sprites: {
-				default: pokeApiPokemon.sprites.other?.dream_world.front_default ?? null,
-				versions: pokeApiPokemon.sprites.versions,
-			},
 			stats: pokeApiPokemon.stats.map((stat) => ({
 				base: stat.base_stat,
 				effort: stat.effort,
 				name: stat.stat.name,
 			})),
-			types: pokeApiPokemon.types.map((type) => type.type.name),
-			weight: pokeApiPokemon.weight,
+			sprites: {
+				default: pokeApiPokemon.sprites.other?.dream_world.front_default ?? null,
+				versions: {
+					"generation-i": pokeApiPokemon.sprites.versions["generation-i"],
+					"generation-ii": pokeApiPokemon.sprites.versions["generation-ii"],
+					"generation-iii": pokeApiPokemon.sprites.versions["generation-iii"],
+					"generation-iv": pokeApiPokemon.sprites.versions["generation-iv"],
+					"generation-v": pokeApiPokemon.sprites.versions["generation-v"],
+					"generation-vi": pokeApiPokemon.sprites.versions["generation-vi"],
+				},
+			},
 		};
+	};
+
+	private readonly filterMovesByVersion = (moves: PokemonMove[]): PokemonMove[] => {
+		const versions = ["red-blue", "gold-silver", "crystal", "ruby-sapphire"];
+
+		return moves
+			.map((move) => {
+				move.version_group_details = move.version_group_details.filter(
+					(details) => !versions.includes(details.version_group.name)
+				);
+
+				return {
+					...move,
+				};
+			})
+			.filter((move) => move.version_group_details.length > 0);
 	};
 }

@@ -16,11 +16,11 @@
 	gap: var(--nextui-space-2);
 }
 
-.title h1 {
+.title h2 {
 	font-size: var(--nextui-fontSizes-3xl);
 	margin: 0;
 }
 
-.title h1 > span {
+.title h2 > span {
 	font-size: var(--nextui-fontSizes-4xl);
 }

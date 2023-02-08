@@ -1,6 +1,5 @@
 export interface PokemonItem {
 	name: string;
-	url: string;
 	id: number;
 	img: string;
 }

@@ -1,10 +1,9 @@
-import { Grid } from "@nextui-org/react";
 import { FC } from "react";
 
 import { PokemonItem } from "@/sections/PokemonList";
 
 import { PokemonCard } from "../PokemonCard/PokemonCard";
-import styles from "./PokemonCardList.module.css";
+import { CardContainer, Container } from "./PokemonCardList.styles";
 
 interface Props {
 	pokemons: PokemonItem[];
@@ -12,10 +11,12 @@ interface Props {
 
 export const PokemonCardList: FC<Props> = ({ pokemons }) => {
 	return (
-		<Grid.Container className={styles.container}>
+		<Container>
 			{pokemons.map((pokemon) => (
-				<PokemonCard key={pokemon.id} pokemon={pokemon} />
+				<CardContainer key={pokemon.id}>
+					<PokemonCard pokemon={pokemon} variant="withName" />
+				</CardContainer>
 			))}
-		</Grid.Container>
+		</Container>
 	);
 };
