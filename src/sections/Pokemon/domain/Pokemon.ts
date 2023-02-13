@@ -1,17 +1,12 @@
-interface PokemonAbility {
-	name: string;
-	is_hidden: boolean;
-}
+import { PokemonAbility } from "./PokemonAbility";
+import { PokemonMove, PokemonMoveByLevel } from "./PokemonMove";
+import { PokemonType } from "./PokemonType";
 
-interface PokemonMoveDetails {
-	level_learned_at: number;
-	move_learn_method: string;
-	version: string;
-}
-
-interface PokemonMove {
-	name: string;
-	details: PokemonMoveDetails[];
+export interface PokemonMoves {
+	learnedByLevel: PokemonMoveByLevel[];
+	learnedByEgg: PokemonMove[];
+	learnedByTutor: PokemonMove[];
+	learnedByMachine: PokemonMove[];
 }
 
 interface RedBlue {
@@ -206,10 +201,10 @@ export interface Pokemon {
 	weight: number;
 	height: number;
 
-	types: string[];
+	types: PokemonType[];
 	abilities: PokemonAbility[];
 
-	moves: PokemonMove[];
+	moves: PokemonMoves;
 	stats: PokemonStat[];
 	sprites: PokemonSprites;
 }

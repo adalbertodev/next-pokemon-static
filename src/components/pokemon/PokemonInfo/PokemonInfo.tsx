@@ -5,14 +5,20 @@ import { Pokemon } from "@/sections/Pokemon";
 
 import { PokemonCard } from "../PokemonCard";
 import {
-	CardContainer,
 	Container,
 	DataCard,
 	DataCardBody,
 	DataCardHeader,
-	DataContainer,
-	SpriteImage,
-	SpritesCardBody,
+	DataCardItemContainer,
+	ImageContainer,
+	MainCard,
+	MainCardBody,
+	MainCardHeader,
+	MainContainer,
+	MovesCard,
+	MovesCardBody,
+	MovesCardHeader,
+	MovesContainer,
 } from "./PokemonInfo.styles";
 
 interface Props {
@@ -20,9 +26,12 @@ interface Props {
 }
 
 export const PokemonInfo: FC<Props> = ({ pokemon }) => {
+	// eslint-disable-next-line no-console
+	console.log(pokemon.weight);
+
 	return (
 		<Container>
-			<CardContainer>
+			<ImageContainer>
 				<PokemonCard
 					pokemon={{
 						id: pokemon.id,
@@ -30,55 +39,78 @@ export const PokemonInfo: FC<Props> = ({ pokemon }) => {
 						name: pokemon.name,
 					}}
 				/>
-			</CardContainer>
+			</ImageContainer>
 
-			<DataContainer>
-				<DataCard>
-					<DataCardHeader>
+			<MainContainer>
+				<MainCard>
+					<MainCardHeader>
 						<h1>{pokemon.name}</h1>
 
 						<SaveFavButton>Guardar en Favoritos</SaveFavButton>
-					</DataCardHeader>
+					</MainCardHeader>
 
-					<DataCardBody>
-						<h3>Sprites:</h3>
+					<MainCardBody>
+						<DataCard>
+							<DataCardHeader>
+								<h3>Datos:</h3>
+							</DataCardHeader>
 
-						<SpritesCardBody>
-							<SpriteImage
-								src={
-									pokemon.sprites.versions["generation-v"]["black-white"].front_default ??
-									"./no-image.png"
-								}
-								alt={pokemon.name}
-							/>
+							<DataCardBody>
+								<DataCardItemContainer>
+									<p>Pokédex Nacional: </p>
+									<p>#{pokemon.id}</p>
+								</DataCardItemContainer>
 
-							<SpriteImage
-								src={
-									pokemon.sprites.versions["generation-v"]["black-white"].back_default ??
-									"./no-image.png"
-								}
-								alt={pokemon.name}
-							/>
+								<DataCardItemContainer>
+									<p>Peso: </p>
+									<p>{pokemon.weight} kg</p>
+								</DataCardItemContainer>
 
-							<SpriteImage
-								src={
-									pokemon.sprites.versions["generation-v"]["black-white"].front_shiny ??
-									"./no-image.png"
-								}
-								alt={pokemon.name}
-							/>
+								<DataCardItemContainer>
+									<p>Altura: </p>
+									<p>{pokemon.height} m</p>
+								</DataCardItemContainer>
 
-							<SpriteImage
-								src={
-									pokemon.sprites.versions["generation-v"]["black-white"].back_shiny ??
-									"./no-image.png"
-								}
-								alt={pokemon.name}
-							/>
-						</SpritesCardBody>
-					</DataCardBody>
-				</DataCard>
-			</DataContainer>
+								<DataCardItemContainer>
+									<p>Tipos: </p>
+									<p>
+										{pokemon.types.map((type) => (
+											<span key={type.name}>{type.name}, </span>
+										))}
+									</p>
+								</DataCardItemContainer>
+
+								<DataCardItemContainer>
+									<p>Habilidad: </p>
+									<p>
+										{pokemon.abilities.map((ability) =>
+											ability.isHidden ? (
+												<strong key={ability.name}>{ability.name}, </strong>
+											) : (
+												<span key={ability.name}>{ability.name}, </span>
+											)
+										)}
+									</p>
+								</DataCardItemContainer>
+							</DataCardBody>
+						</DataCard>
+					</MainCardBody>
+				</MainCard>
+			</MainContainer>
+
+			<MovesContainer>
+				<MovesCard>
+					<MovesCardHeader>
+						<h3>Movimientos</h3>
+					</MovesCardHeader>
+
+					<MovesCardBody>
+						{pokemon.moves.learnedByLevel.map((move) => (
+							<p key={move.name}>{move.name}</p>
+						))}
+					</MovesCardBody>
+				</MovesCard>
+			</MovesContainer>
 		</Container>
 	);
 };

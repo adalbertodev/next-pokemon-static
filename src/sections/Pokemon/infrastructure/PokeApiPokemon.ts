@@ -1,9 +1,6 @@
-interface NamedApiResource {
-	name: string;
-	url: string;
-}
+import { NamedApiResource } from "./PokeApiCommon";
 
-interface PokemonAbility {
+export interface PokeApiAbility {
 	ability: NamedApiResource;
 	is_hidden: boolean;
 	slot: number;
@@ -30,19 +27,19 @@ interface PokemonMoveVersion {
 	version_group: NamedApiResource;
 }
 
-export interface PokemonMove {
+export interface PokeApiMove {
 	move: NamedApiResource;
 	version_group_details: PokemonMoveVersion[];
 }
 
-interface PokemonType {
+export interface PokeApiType {
 	slot: number;
 	type: NamedApiResource;
 }
 
 interface PastTypes {
 	generation: NamedApiResource;
-	types: PokemonType[];
+	types: PokeApiType[];
 }
 
 interface DreamWorld {
@@ -290,7 +287,7 @@ interface PokemonStat {
 }
 
 export interface PokeApiPokemon {
-	abilities: PokemonAbility[];
+	abilities: PokeApiAbility[];
 	base_experience: number;
 	forms: NamedApiResource[];
 	game_indices: VersionGameIndex[];
@@ -299,13 +296,13 @@ export interface PokeApiPokemon {
 	id: number;
 	is_default: boolean;
 	location_area_encounters: string;
-	moves: PokemonMove[];
+	moves: PokeApiMove[];
 	name: string;
 	order: number;
 	past_types: PastTypes[];
 	species: NamedApiResource;
 	sprites: PokemonSprites;
 	stats: PokemonStat[];
-	types: PokemonType[];
+	types: PokeApiType[];
 	weight: number;
 }

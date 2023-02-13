@@ -1,23 +1,19 @@
-import { Card, Container as NextUIContainer, Grid, Image } from "@nextui-org/react";
+import { Card, Grid, Image } from "@nextui-org/react";
 import { FC } from "react";
 
-interface ContainerProps {
+interface CommonProps {
 	children: React.ReactNode;
 }
 
-export const Container: FC<ContainerProps> = ({ children }) => {
+export const Container: FC<CommonProps> = ({ children }) => {
 	return (
-		<Grid.Container gap={2} css={{ marginTop: "5px" }}>
+		<Grid.Container gap={2} css={{ width: "100%", margin: 0 }}>
 			{children}
 		</Grid.Container>
 	);
 };
 
-interface CardContainerProps {
-	children: React.ReactNode;
-}
-
-export const CardContainer: FC<CardContainerProps> = ({ children }) => {
+export const ImageContainer: FC<CommonProps> = ({ children }) => {
 	return (
 		<Grid xs={12} sm={4}>
 			{children}
@@ -25,11 +21,7 @@ export const CardContainer: FC<CardContainerProps> = ({ children }) => {
 	);
 };
 
-interface DataContainerProps {
-	children: React.ReactNode;
-}
-
-export const DataContainer: FC<DataContainerProps> = ({ children }) => {
+export const MainContainer: FC<CommonProps> = ({ children }) => {
 	return (
 		<Grid xs={12} sm={8}>
 			{children}
@@ -37,19 +29,11 @@ export const DataContainer: FC<DataContainerProps> = ({ children }) => {
 	);
 };
 
-interface DataCardProps {
-	children: React.ReactNode;
-}
-
-export const DataCard: FC<DataCardProps> = ({ children }) => {
+export const MainCard: FC<CommonProps> = ({ children }) => {
 	return <Card>{children}</Card>;
 };
 
-interface DataCardHeaderProps {
-	children: React.ReactNode;
-}
-
-export const DataCardHeader: FC<DataCardHeaderProps> = ({ children }) => {
+export const MainCardHeader: FC<CommonProps> = ({ children }) => {
 	return (
 		<Card.Header
 			css={{
@@ -66,11 +50,7 @@ export const DataCardHeader: FC<DataCardHeaderProps> = ({ children }) => {
 	);
 };
 
-interface DataCardBodyProps {
-	children: React.ReactNode;
-}
-
-export const DataCardBody: FC<DataCardBodyProps> = ({ children }) => {
+export const MainCardBody: FC<CommonProps> = ({ children }) => {
 	return (
 		<Card.Body css={{ padding: "var(--nextui-space-sm) var(--nextui-space-lg)" }}>
 			{children}
@@ -78,15 +58,64 @@ export const DataCardBody: FC<DataCardBodyProps> = ({ children }) => {
 	);
 };
 
-interface SpritesCardBodyProps {
-	children: React.ReactNode;
-}
+export const DataCard: FC<CommonProps> = ({ children }) => {
+	return <Card css={{ filter: "none" }}>{children}</Card>;
+};
 
-export const SpritesCardBody: FC<SpritesCardBodyProps> = ({ children }) => {
+export const DataCardHeader: FC<CommonProps> = ({ children }) => {
+	return <Card.Header>{children}</Card.Header>;
+};
+
+export const DataCardBody: FC<CommonProps> = ({ children }) => {
 	return (
-		<NextUIContainer display="flex" direction="row" gap={0}>
+		<Card.Body css={{ padding: "var(--nextui-space-sm) var(--nextui-space-lg)" }}>
+			<Grid.Container>{children}</Grid.Container>
+		</Card.Body>
+	);
+};
+
+export const DataCardItemContainer: FC<CommonProps> = ({ children }) => {
+	return (
+		<Grid
+			xs={12}
+			sm={6}
+			md={4}
+			css={{
+				display: "flex",
+				gap: "var(--nextui-space-4)",
+
+				"& p": {
+					letterSpacing: "var(--nextui-letterSpacings-tight)",
+				},
+
+				"& p:first-child": {
+					color: "var(--nextui-colors-primary)",
+					fontWeight: "var(--nextui-fontWeights-bold)",
+				},
+			}}
+		>
 			{children}
-		</NextUIContainer>
+		</Grid>
+	);
+};
+
+export const MovesContainer: FC<CommonProps> = ({ children }) => {
+	return <Grid xs={12}>{children}</Grid>;
+};
+
+export const MovesCard: FC<CommonProps> = ({ children }) => {
+	return <Card>{children}</Card>;
+};
+
+export const MovesCardHeader: FC<CommonProps> = ({ children }) => {
+	return <Card.Header>{children}</Card.Header>;
+};
+
+export const MovesCardBody: FC<CommonProps> = ({ children }) => {
+	return (
+		<Card.Body css={{ padding: "var(--nextui-space-sm) var(--nextui-space-lg)" }}>
+			{children}
+		</Card.Body>
 	);
 };
 
