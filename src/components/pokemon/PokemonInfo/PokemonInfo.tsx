@@ -26,9 +26,6 @@ interface Props {
 }
 
 export const PokemonInfo: FC<Props> = ({ pokemon }) => {
-	// eslint-disable-next-line no-console
-	console.log(pokemon.weight);
-
 	return (
 		<Container>
 			<ImageContainer>
@@ -106,7 +103,9 @@ export const PokemonInfo: FC<Props> = ({ pokemon }) => {
 
 					<MovesCardBody>
 						{pokemon.moves.learnedByLevel.map((move) => (
-							<p key={move.name}>{move.name}</p>
+							<p key={move.name}>
+								{move.name} {move.versionDetails[1].learnedLevel} {move.versionDetails[1].version}
+							</p>
 						))}
 					</MovesCardBody>
 				</MovesCard>

@@ -7,14 +7,22 @@ import {
 	PokemonMoveBase,
 	PokemonMoves,
 	PokemonRepository,
+	PokemonStat,
 	PokemonType,
 	Type,
 	TypeValues,
 } from "../domain";
-import { Name, NamedApiResource } from "./PokeApiCommon";
-import { PokeApiAbility, PokeApiMove, PokeApiPokemon, PokeApiType } from "./PokeApiPokemon";
-import { PokeApiPokemonMove } from "./PokeApiPokemonMove";
-import { PokeApiPokemonType } from "./PokeApiPokemonType";
+import {
+	PokeApiAbility,
+	PokeApiMove,
+	PokeApiName,
+	PokeApiNamedResource,
+	PokeApiPokemon,
+	PokeApiPokemonMove,
+	PokeApiPokemonType,
+	PokeApiStat,
+	PokeApiType,
+} from "./PokeApi";
 
 export class PokeApiPokemonRepository implements PokemonRepository {
 	private readonly pokemonEndpoint = "https://pokeapi.co/api/v2/pokemon/$id";
@@ -28,7 +36,7 @@ export class PokeApiPokemonRepository implements PokemonRepository {
 		return await this.pokeApiToApp(pokeApiPokemon);
 	};
 
-	searchByName = async (name: string): Promise<Pokemon> => {
+	public searchByName = async (name: string): Promise<Pokemon> => {
 		const url = this.pokemonEndpoint.replace("$id", name);
 
 		const pokeApiPokemon = (await (await fetch(url)).json()) as PokeApiPokemon;
@@ -47,21 +55,17 @@ export class PokeApiPokemonRepository implements PokemonRepository {
 			abilities: await this.getAppAbilities(pokeApiPokemon.abilities),
 
 			moves: await this.getAppMoves(pokeApiPokemon.moves),
-			stats: pokeApiPokemon.stats.map((stat) => ({
-				base: stat.base_stat,
-				effort: stat.effort,
-				name: stat.stat.name,
-			})),
+			stats: await this.getAppStats(pokeApiPokemon.stats),
 			sprites: {
 				default: pokeApiPokemon.sprites.other?.dream_world.front_default ?? null,
-				versions: {
-					"generation-i": pokeApiPokemon.sprites.versions["generation-i"],
-					"generation-ii": pokeApiPokemon.sprites.versions["generation-ii"],
-					"generation-iii": pokeApiPokemon.sprites.versions["generation-iii"],
-					"generation-iv": pokeApiPokemon.sprites.versions["generation-iv"],
-					"generation-v": pokeApiPokemon.sprites.versions["generation-v"],
-					"generation-vi": pokeApiPokemon.sprites.versions["generation-vi"],
-				},
+				backFemale: pokeApiPokemon.sprites.back_female,
+				backMale: pokeApiPokemon.sprites.back_default,
+				backShinyFemale: pokeApiPokemon.sprites.back_shiny_female,
+				backShinyMale: pokeApiPokemon.sprites.back_shiny,
+				frontFemale: pokeApiPokemon.sprites.front_female,
+				frontMale: pokeApiPokemon.sprites.front_default,
+				frontShinyFemale: pokeApiPokemon.sprites.front_shiny_female,
+				frontShinyMale: pokeApiPokemon.sprites.front_shiny,
 			},
 		};
 	};
@@ -92,7 +96,7 @@ export class PokeApiPokemonRepository implements PokemonRepository {
 				const spanishName =
 					names.find((name) => name.language.name === this.language)?.name ?? name;
 
-				const convertToTypes = async (resource: NamedApiResource[]): Promise<Type[]> => {
+				const convertToTypes = async (resource: PokeApiNamedResource[]): Promise<Type[]> => {
 					return (await Promise.all(resource.map(async ({ url }) => await this.translateToEs(url))))
 						.map((name) => (this.checkType(name || "") ? name : undefined))
 						.filter((type): type is Type => type !== undefined);
@@ -227,9 +231,19 @@ export class PokeApiPokemonRepository implements PokemonRepository {
 		};
 	};
 
+	private readonly getAppStats = async (stats: PokeApiStat[]): Promise<PokemonStat[]> => {
+		return await Promise.all(
+			stats.map(async (stat) => ({
+				base: stat.base_stat,
+				effort: stat.effort,
+				name: (await this.translateToEs(stat.stat.url)) ?? stat.stat.name,
+			}))
+		);
+	};
+
 	private readonly translateToEs = async (url: string): Promise<string | undefined> => {
 		const response = await fetch(url);
-		const { names } = (await response.json()) as { names: Name[] };
+		const { names } = (await response.json()) as { names: PokeApiName[] };
 
 		return names.find((name) => name.language.name === this.language)?.name;
 	};

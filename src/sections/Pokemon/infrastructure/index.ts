@@ -1,6 +1,2 @@
-export * from "./PokeApiCommon";
-export * from "./PokeApiPokemon";
-export * from "./PokeApiPokemonAbility";
-export * from "./PokeApiPokemonMove";
+export * from "./PokeApi";
 export * from "./PokeApiPokemonRepository";
-export * from "./PokeApiPokemonType";

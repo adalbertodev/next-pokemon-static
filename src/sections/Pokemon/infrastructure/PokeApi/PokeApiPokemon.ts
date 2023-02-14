@@ -1,44 +1,44 @@
-import { NamedApiResource } from "./PokeApiCommon";
+import { PokeApiNamedResource } from "./PokeApiCommon";
 
 export interface PokeApiAbility {
-	ability: NamedApiResource;
+	ability: PokeApiNamedResource;
 	is_hidden: boolean;
 	slot: number;
 }
 
 interface VersionGameIndex {
 	game_index: number;
-	version: NamedApiResource;
+	version: PokeApiNamedResource;
 }
 
 interface PokemonHeldItemVersion {
 	rarity: number;
-	version: NamedApiResource;
+	version: PokeApiNamedResource;
 }
 
 interface PokemonHeldItem {
-	item: NamedApiResource;
+	item: PokeApiNamedResource;
 	version_details: PokemonHeldItemVersion[];
 }
 
 interface PokemonMoveVersion {
 	level_learned_at: number;
-	move_learn_method: NamedApiResource;
-	version_group: NamedApiResource;
+	move_learn_method: PokeApiNamedResource;
+	version_group: PokeApiNamedResource;
 }
 
 export interface PokeApiMove {
-	move: NamedApiResource;
+	move: PokeApiNamedResource;
 	version_group_details: PokemonMoveVersion[];
 }
 
 export interface PokeApiType {
 	slot: number;
-	type: NamedApiResource;
+	type: PokeApiNamedResource;
 }
 
 interface PastTypes {
-	generation: NamedApiResource;
+	generation: PokeApiNamedResource;
 	types: PokeApiType[];
 }
 
@@ -280,16 +280,16 @@ interface PokemonSprites {
 	versions: VersionSprites;
 }
 
-interface PokemonStat {
+export interface PokeApiStat {
 	base_stat: number;
 	effort: number;
-	stat: NamedApiResource;
+	stat: PokeApiNamedResource;
 }
 
 export interface PokeApiPokemon {
 	abilities: PokeApiAbility[];
 	base_experience: number;
-	forms: NamedApiResource[];
+	forms: PokeApiNamedResource[];
 	game_indices: VersionGameIndex[];
 	height: number;
 	held_items: PokemonHeldItem[];
@@ -300,9 +300,9 @@ export interface PokeApiPokemon {
 	name: string;
 	order: number;
 	past_types: PastTypes[];
-	species: NamedApiResource;
+	species: PokeApiNamedResource;
 	sprites: PokemonSprites;
-	stats: PokemonStat[];
+	stats: PokeApiStat[];
 	types: PokeApiType[];
 	weight: number;
 }

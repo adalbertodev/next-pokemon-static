@@ -1,6 +1,10 @@
-import { PokemonAbility } from "./PokemonAbility";
 import { PokemonMove, PokemonMoveByLevel } from "./PokemonMove";
 import { PokemonType } from "./PokemonType";
+
+export interface PokemonAbility {
+	name: string;
+	isHidden: boolean;
+}
 
 export interface PokemonMoves {
 	learnedByLevel: PokemonMoveByLevel[];
@@ -9,190 +13,23 @@ export interface PokemonMoves {
 	learnedByMachine: PokemonMove[];
 }
 
-interface RedBlue {
-	back_default: string | null;
-	back_gray: string | null;
-	back_transparent: string | null;
-	front_default: string | null;
-	front_gray: string | null;
-	front_transparent: string | null;
-}
-
-interface Yellow {
-	back_default: string | null;
-	back_gray: string | null;
-	back_transparent: string | null;
-	front_default: string | null;
-	front_gray: string | null;
-	front_transparent: string | null;
-}
-
-interface GenerationISprites {
-	"red-blue": RedBlue;
-	yellow: Yellow;
-}
-
-interface Crystal {
-	back_default: string | null;
-	back_shiny: string | null;
-	back_shiny_transparent: string | null;
-	back_transparent: string | null;
-	front_default: string | null;
-	front_shiny: string | null;
-	front_shiny_transparent: string | null;
-	front_transparent: string | null;
-}
-
-interface Gold {
-	back_default: string | null;
-	back_shiny: string | null;
-	front_default: string | null;
-	front_shiny: string | null;
-	front_transparent: string | null;
-}
-
-interface Silver {
-	back_default: string | null;
-	back_shiny: string | null;
-	front_default: string | null;
-	front_shiny: string | null;
-	front_transparent: string | null;
-}
-
-interface GenerationIISprites {
-	crystal: Crystal;
-	gold: Gold;
-	silver: Silver;
-}
-
-interface Emerald {
-	front_default: string | null;
-	front_shiny: string | null;
-}
-
-interface FireredLeafgreen {
-	back_default: string | null;
-	back_shiny: string | null;
-	front_default: string | null;
-	front_shiny: string | null;
-}
-
-interface RubySapphire {
-	back_default: string | null;
-	back_shiny: string | null;
-	front_default: string | null;
-	front_shiny: string | null;
-}
-
-interface GenerationIIISprites {
-	emerald: Emerald;
-	"firered-leafgreen": FireredLeafgreen;
-	"ruby-sapphire": RubySapphire;
-}
-
-interface DiamondPearl {
-	back_default: string | null;
-	back_shiny: string | null;
-	back_female: string | null;
-	front_default: string | null;
-	front_shiny: string | null;
-	back_shiny_female: string | null;
-	front_female: string | null;
-	front_shiny_female: string | null;
-}
-
-interface HeartgoldSoulsilver {
-	back_default: string | null;
-	back_shiny: string | null;
-	back_female: string | null;
-	front_default: string | null;
-	front_shiny: string | null;
-	back_shiny_female: string | null;
-	front_female: string | null;
-	front_shiny_female: string | null;
-}
-
-interface Platinum {
-	back_default: string | null;
-	back_shiny: string | null;
-	back_female: string | null;
-	front_default: string | null;
-	front_shiny: string | null;
-	back_shiny_female: string | null;
-	front_female: string | null;
-	front_shiny_female: string | null;
-}
-
-interface GenerationIVSprites {
-	"diamond-pearl": DiamondPearl;
-	"heartgold-soulsilver": HeartgoldSoulsilver;
-	platinum: Platinum;
-}
-
-interface Animated {
-	back_default: string | null;
-	back_shiny: string | null;
-	back_female: string | null;
-	front_default: string | null;
-	front_shiny: string | null;
-	back_shiny_female: string | null;
-	front_female: string | null;
-	front_shiny_female: string | null;
-}
-
-interface BlackWhite {
-	animated: Animated;
-	back_default: string | null;
-	back_shiny: string | null;
-	back_female: string | null;
-	front_default: string | null;
-	front_shiny: string | null;
-	back_shiny_female: string | null;
-	front_female: string | null;
-	front_shiny_female: string | null;
-}
-
-interface GenerationVSprites {
-	"black-white": BlackWhite;
-}
-
-interface OmegarubyAlphasapphire {
-	front_default: string | null;
-	front_female: string | null;
-	front_shiny: string | null;
-	front_shiny_female: string | null;
-}
-
-interface XY {
-	front_default: string | null;
-	front_female: string | null;
-	front_shiny: string | null;
-	front_shiny_female: string | null;
-}
-
-interface GenerationVISprites {
-	"omegaruby-alphasapphire": OmegarubyAlphasapphire;
-	"x-y": XY;
-}
-
-interface VersionSprites {
-	"generation-i": GenerationISprites;
-	"generation-ii": GenerationIISprites;
-	"generation-iii": GenerationIIISprites;
-	"generation-iv": GenerationIVSprites;
-	"generation-v": GenerationVSprites;
-	"generation-vi": GenerationVISprites;
+export interface PokemonStat {
+	name: string;
+	base: number;
+	effort: number;
 }
 
 interface PokemonSprites {
 	default: string | null;
-	versions: VersionSprites;
-}
 
-interface PokemonStat {
-	name: string;
-	base: number;
-	effort: number;
+	backFemale: string | null;
+	backMale: string | null;
+	backShinyFemale: string | null;
+	backShinyMale: string | null;
+	frontFemale: string | null;
+	frontMale: string | null;
+	frontShinyFemale: string | null;
+	frontShinyMale: string | null;
 }
 
 export interface Pokemon {

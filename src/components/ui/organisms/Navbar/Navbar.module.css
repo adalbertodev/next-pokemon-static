@@ -5,12 +5,10 @@
 	flex-direction: row;
 	height: 70px;
 	justify-content: space-between;
-	left: 0;
 	padding: 0 var(--nextui-space-15);
-	position: sticky;
-	top: 0;
+	position: relative;
 	width: 100%;
-	z-index: 2;
+	z-index: var(--nextui-zIndices-1);
 }
 
 .title {
