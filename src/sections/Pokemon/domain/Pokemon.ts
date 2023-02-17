@@ -1,4 +1,4 @@
-import { PokemonMove, PokemonMoveByLevel } from "./PokemonMove";
+import { PokemonMove } from "./PokemonMove";
 import { PokemonType } from "./PokemonType";
 
 export interface PokemonAbility {
@@ -7,10 +7,7 @@ export interface PokemonAbility {
 }
 
 export interface PokemonMoves {
-	learnedByLevel: PokemonMoveByLevel[];
-	learnedByEgg: PokemonMove[];
-	learnedByTutor: PokemonMove[];
-	learnedByMachine: PokemonMove[];
+	learnByLevel: PokemonMove[];
 }
 
 export interface PokemonStat {

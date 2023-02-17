@@ -1,28 +1,18 @@
 /* eslint-disable camelcase */
+import { appFetch } from "@/utils";
+
 import {
-	DamageClass,
-	DamageClassValues,
 	Pokemon,
 	PokemonAbility,
-	PokemonMoveBase,
 	PokemonMoves,
 	PokemonRepository,
 	PokemonStat,
 	PokemonType,
-	Type,
-	TypeValues,
 } from "../domain";
-import {
-	PokeApiAbility,
-	PokeApiMove,
-	PokeApiName,
-	PokeApiNamedResource,
-	PokeApiPokemon,
-	PokeApiPokemonMove,
-	PokeApiPokemonType,
-	PokeApiStat,
-	PokeApiType,
-} from "./PokeApi";
+import { PokeApiAbility, PokeApiMove, PokeApiPokemon, PokeApiStat, PokeApiType } from "./PokeApi";
+import { PokeApiMoveRepository } from "./PokeApiMoveRepository";
+import { PokeApiTypeRepository } from "./PokeApiTypeRepository";
+import { translateName } from "./utils";
 
 export class PokeApiPokemonRepository implements PokemonRepository {
 	private readonly pokemonEndpoint = "https://pokeapi.co/api/v2/pokemon/$id";
@@ -31,7 +21,7 @@ export class PokeApiPokemonRepository implements PokemonRepository {
 	public searchById = async (id: number): Promise<Pokemon> => {
 		const url = this.pokemonEndpoint.replace("$id", id.toString());
 
-		const pokeApiPokemon = (await (await fetch(url)).json()) as PokeApiPokemon;
+		const pokeApiPokemon = await appFetch<PokeApiPokemon>(url);
 
 		return await this.pokeApiToApp(pokeApiPokemon);
 	};
@@ -39,216 +29,94 @@ export class PokeApiPokemonRepository implements PokemonRepository {
 	public searchByName = async (name: string): Promise<Pokemon> => {
 		const url = this.pokemonEndpoint.replace("$id", name);
 
-		const pokeApiPokemon = (await (await fetch(url)).json()) as PokeApiPokemon;
+		const pokeApiPokemon = await appFetch<PokeApiPokemon>(url);
 
 		return await this.pokeApiToApp(pokeApiPokemon);
 	};
 
 	private readonly pokeApiToApp = async (pokeApiPokemon: PokeApiPokemon): Promise<Pokemon> => {
+		const { id, name, weight, height, types, sprites, abilities, moves, stats } = pokeApiPokemon;
+
 		return {
-			id: pokeApiPokemon.id,
-			name: pokeApiPokemon.name,
-			weight: pokeApiPokemon.weight / 10, // api return in hectometers
-			height: pokeApiPokemon.height / 10, // api return in decimeters
+			id,
+			name,
+			weight: weight / 10, // api return in hectometers
+			height: height / 10, // api return in decimeters
 
-			types: await this.getAppTypes(pokeApiPokemon.types),
-			abilities: await this.getAppAbilities(pokeApiPokemon.abilities),
+			types: await this.convertToAppTypes(types),
+			abilities: await this.convertToAppAbilities(abilities),
 
-			moves: await this.getAppMoves(pokeApiPokemon.moves),
-			stats: await this.getAppStats(pokeApiPokemon.stats),
+			moves: await this.getAppMoves(moves),
+			stats: await this.convertToAppStats(stats),
 			sprites: {
-				default: pokeApiPokemon.sprites.other?.dream_world.front_default ?? null,
-				backFemale: pokeApiPokemon.sprites.back_female,
-				backMale: pokeApiPokemon.sprites.back_default,
-				backShinyFemale: pokeApiPokemon.sprites.back_shiny_female,
-				backShinyMale: pokeApiPokemon.sprites.back_shiny,
-				frontFemale: pokeApiPokemon.sprites.front_female,
-				frontMale: pokeApiPokemon.sprites.front_default,
-				frontShinyFemale: pokeApiPokemon.sprites.front_shiny_female,
-				frontShinyMale: pokeApiPokemon.sprites.front_shiny,
+				default: sprites.other?.dream_world.front_default ?? null,
+				backFemale: sprites.back_female,
+				backMale: sprites.back_default,
+				backShinyFemale: sprites.back_shiny_female,
+				backShinyMale: sprites.back_shiny,
+				frontFemale: sprites.front_female,
+				frontMale: sprites.front_default,
+				frontShinyFemale: sprites.front_shiny_female,
+				frontShinyMale: sprites.front_shiny,
 			},
 		};
 	};
 
-	private readonly getAppAbilities = async (
+	private readonly convertToAppAbilities = async (
 		abilities: PokeApiAbility[]
 	): Promise<PokemonAbility[]> => {
-		return await Promise.all(
-			abilities.map(async ({ ability, is_hidden: isHidden }) => {
-				const { name, url } = ability;
+		const pokemonAbilities = abilities.map(async ({ ability, is_hidden }) => {
+			return {
+				name: (await translateName(ability.url, this.language)) ?? ability.name,
+				isHidden: is_hidden,
+			};
+		});
 
-				return {
-					name: (await this.translateToEs(url)) ?? name,
-					isHidden,
-				};
-			})
-		);
+		return await Promise.all(pokemonAbilities);
 	};
 
-	private readonly getAppTypes = async (types: PokeApiType[]): Promise<PokemonType[]> => {
-		return await Promise.all(
-			types.map(async ({ type }) => {
-				const { name, url } = type;
+	private readonly convertToAppTypes = async (types: PokeApiType[]): Promise<PokemonType[]> => {
+		const typeRepository = new PokeApiTypeRepository();
 
-				const response = await fetch(url);
-				const { names, damage_relations } = (await response.json()) as PokeApiPokemonType;
-
-				const spanishName =
-					names.find((name) => name.language.name === this.language)?.name ?? name;
-
-				const convertToTypes = async (resource: PokeApiNamedResource[]): Promise<Type[]> => {
-					return (await Promise.all(resource.map(async ({ url }) => await this.translateToEs(url))))
-						.map((name) => (this.checkType(name || "") ? name : undefined))
-						.filter((type): type is Type => type !== undefined);
-				};
-
-				return {
-					name: this.checkType(spanishName) ? spanishName : "Normal",
-					damageRelations: {
-						noDamageTo: await convertToTypes(damage_relations.no_damage_to),
-						halfDamageTo: await convertToTypes(damage_relations.half_damage_to),
-						doubleDamageTo: await convertToTypes(damage_relations.double_damage_to),
-						noDamageFrom: await convertToTypes(damage_relations.no_damage_from),
-						halfDamageFrom: await convertToTypes(damage_relations.half_damage_from),
-						doubleDamageFrom: await convertToTypes(damage_relations.double_damage_from),
-					},
-				};
-			})
-		);
+		return Promise.all(types.map(async ({ type }) => typeRepository.searchByUrl(type.url)));
 	};
 
 	private readonly getAppMoves = async (moves: PokeApiMove[]): Promise<PokemonMoves> => {
+		const moveRepository = new PokeApiMoveRepository();
+
 		const filterBy = (moves: PokeApiMove[], method: string): PokeApiMove[] => {
 			return moves
-				.map((move) => {
-					move.version_group_details = move.version_group_details.filter(
-						(details) => details.move_learn_method.name === method
-					);
-
-					return {
-						...move,
-					};
-				})
+				.map((move) => ({
+					...move,
+					version_group_details: move.version_group_details.filter(
+						({ move_learn_method }) => move_learn_method.name === method
+					),
+				}))
 				.filter((move) => move.version_group_details.length > 0);
 		};
 
-		const getMoveData = async (move: PokeApiMove): Promise<PokemonMoveBase> => {
-			const {
-				move: { name, url },
-			} = move;
-
-			const response = await fetch(url);
-			const { names, type, damage_class } = (await response.json()) as PokeApiPokemonMove;
-
-			const typeTranslated = (await this.translateToEs(type.url)) ?? "";
-
-			const damageClassTranslated = damage_class
-				? (await this.translateToEs(damage_class.url)) ?? null
-				: null;
-
-			const isDamageClass = (damageClass: string | null): damageClass is DamageClass => {
-				return DamageClassValues.includes(damageClass as DamageClass);
-			};
-
-			return {
-				name: names.find((name) => name.language.name === this.language)?.name ?? name,
-				type: this.checkType(typeTranslated) ? typeTranslated : "Normal",
-				damageClass: isDamageClass(damageClassTranslated) ? damageClassTranslated : null,
-			};
-		};
-
-		const movesByLevelUp = filterBy(moves, "level-up");
-		const movesByEgg = filterBy(moves, "egg");
-		const movesByTutor = filterBy(moves, "tutor");
-		const movesByMachine = filterBy(moves, "machine");
-
-		const learnedByLevel = await Promise.all(
-			movesByLevelUp.map(async (move) => {
-				const { version_group_details } = move;
-
-				const moveBase = await getMoveData(move);
-
-				return {
-					...moveBase,
-					versionDetails: version_group_details.map((details) => ({
-						version: details.version_group.name,
-						learnedLevel: details.level_learned_at,
-					})),
-				};
-			})
-		);
-
-		const learnedByEgg = await Promise.all(
-			movesByEgg.map(async (move) => {
-				const { version_group_details } = move;
-
-				const moveBase = await getMoveData(move);
-
-				return {
-					...moveBase,
-					versionDetails: version_group_details.map((details) => ({
-						version: details.version_group.name,
-					})),
-				};
-			})
-		);
-
-		const learnedByTutor = await Promise.all(
-			movesByTutor.map(async (move) => {
-				const { version_group_details } = move;
-
-				const moveBase = await getMoveData(move);
-
-				return {
-					...moveBase,
-					versionDetails: version_group_details.map((details) => ({
-						version: details.version_group.name,
-					})),
-				};
-			})
-		);
-
-		const learnedByMachine = await Promise.all(
-			movesByMachine.map(async (move) => {
-				const { version_group_details } = move;
-
-				const moveBase = await getMoveData(move);
-
-				return {
-					...moveBase,
-					versionDetails: version_group_details.map((details) => ({
-						version: details.version_group.name,
-					})),
-				};
+		const learnByLevel = filterBy(moves, "level-up").map(
+			async ({ move, version_group_details }) => ({
+				...(await moveRepository.searchByUrl(move.url)),
+				versionDetails: version_group_details.map((details) => ({
+					version: details.version_group.name,
+					learnedLevel: details.level_learned_at,
+				})),
 			})
 		);
 
 		return {
-			learnedByLevel,
-			learnedByEgg,
-			learnedByTutor,
-			learnedByMachine,
+			learnByLevel: await Promise.all(learnByLevel),
 		};
 	};
 
-	private readonly getAppStats = async (stats: PokeApiStat[]): Promise<PokemonStat[]> => {
-		return await Promise.all(
-			stats.map(async (stat) => ({
-				base: stat.base_stat,
-				effort: stat.effort,
-				name: (await this.translateToEs(stat.stat.url)) ?? stat.stat.name,
-			}))
-		);
-	};
+	private readonly convertToAppStats = async (stats: PokeApiStat[]): Promise<PokemonStat[]> => {
+		const pokemonStats = stats.map(async ({ stat, base_stat, effort }) => ({
+			base: base_stat,
+			effort,
+			name: (await translateName(stat.url, this.language)) ?? stat.name,
+		}));
 
-	private readonly translateToEs = async (url: string): Promise<string | undefined> => {
-		const response = await fetch(url);
-		const { names } = (await response.json()) as { names: PokeApiName[] };
-
-		return names.find((name) => name.language.name === this.language)?.name;
-	};
-
-	private readonly checkType = (type: string): type is Type => {
-		return TypeValues.includes(type as Type);
+		return await Promise.all(pokemonStats);
 	};
 }

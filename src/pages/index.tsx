@@ -17,7 +17,7 @@ const HomePage: NextPage<Props> = ({ pokemons }) => {
 };
 
 export const getStaticProps: GetStaticProps<Props> = async (_: GetStaticPropsContext) => {
-	const pokemonList = await new PokeApiPokemonListRepository().searchWithLimitBy(151);
+	const pokemonList = await new PokeApiPokemonListRepository().searchLimitedBy(151);
 
 	return {
 		props: {

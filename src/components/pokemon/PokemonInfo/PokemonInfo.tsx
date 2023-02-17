@@ -102,7 +102,7 @@ export const PokemonInfo: FC<Props> = ({ pokemon }) => {
 					</MovesCardHeader>
 
 					<MovesCardBody>
-						{pokemon.moves.learnedByLevel.map((move) => (
+						{pokemon.moves.learnByLevel.map((move) => (
 							<p key={move.name}>
 								{move.name} {move.versionDetails[1].learnedLevel} {move.versionDetails[1].version}
 							</p>

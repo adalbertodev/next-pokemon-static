@@ -37,3 +37,8 @@ export interface PokeApiGenerationGameIndex {
 	game_index: number;
 	generation: PokeApiNamedResource;
 }
+
+export interface PokeApiFlavorText {
+	flavor_text: string;
+	language: PokeApiNamedResource;
+}
