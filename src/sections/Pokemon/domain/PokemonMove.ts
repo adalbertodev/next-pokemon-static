@@ -1,13 +1,8 @@
 import { Type } from "./PokemonType";
 
-export const DamageClassValues = ["physical", "special", "status"] as const;
+export const DamageClassValues = ["físico", "especial", "estado"] as const;
 
 export type DamageClass = (typeof DamageClassValues)[number];
-
-interface MoveVersionDetails {
-	version: string;
-	learnedLevel: number;
-}
 
 export interface PokemonMoveBase {
 	name: string;
@@ -18,5 +13,5 @@ export interface PokemonMoveBase {
 }
 
 export interface PokemonMove extends PokemonMoveBase {
-	versionDetails: MoveVersionDetails[];
+	learnedLevel: number;
 }

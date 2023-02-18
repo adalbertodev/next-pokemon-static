@@ -84,24 +84,51 @@ export class PokeApiPokemonRepository implements PokemonRepository {
 	private readonly getAppMoves = async (moves: PokeApiMove[]): Promise<PokemonMoves> => {
 		const moveRepository = new PokeApiMoveRepository();
 
-		const filterBy = (moves: PokeApiMove[], method: string): PokeApiMove[] => {
+		const filterByMethod = (moves: PokeApiMove[], method: string): PokeApiMove[] => {
 			return moves
-				.map((move) => ({
-					...move,
-					version_group_details: move.version_group_details.filter(
-						({ move_learn_method }) => move_learn_method.name === method
-					),
-				}))
+				.map((move) => {
+					return {
+						...move,
+						version_group_details: move.version_group_details.filter(
+							({ move_learn_method }) => move_learn_method.name === method
+						),
+					};
+				})
 				.filter((move) => move.version_group_details.length > 0);
 		};
 
-		const learnByLevel = filterBy(moves, "level-up").map(
+		const filterByLastVersion = (moves: PokeApiMove[]): PokeApiMove[] => {
+			const versions = [
+				"scarlet-violet",
+				"brilliant-diamond-and-shining-pearl",
+				"sword-shield",
+				"ultra-sun-ultra-moon",
+				"sun-moon",
+				"omega-ruby-alpha-sapphire",
+			];
+
+			const lastVersionToAppear = versions.find((version) =>
+				moves.find((move) =>
+					move.version_group_details.find(({ version_group }) => version_group.name === version)
+				)
+			);
+
+			return moves
+				.map((move) => {
+					return {
+						...move,
+						version_group_details: move.version_group_details.filter(
+							({ version_group }) => version_group.name === lastVersionToAppear
+						),
+					};
+				})
+				.filter((move) => move.version_group_details.length > 0);
+		};
+
+		const learnByLevel = filterByLastVersion(filterByMethod(moves, "level-up")).map(
 			async ({ move, version_group_details }) => ({
 				...(await moveRepository.searchByUrl(move.url)),
-				versionDetails: version_group_details.map((details) => ({
-					version: details.version_group.name,
-					learnedLevel: details.level_learned_at,
-				})),
+				learnedLevel: version_group_details[0].level_learned_at,
 			})
 		);
 

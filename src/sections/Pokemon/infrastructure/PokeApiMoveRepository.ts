@@ -29,7 +29,8 @@ export class PokeApiMoveRepository {
 		const { names, type, damage_class, name, power, accuracy } = pokeApiMove;
 
 		const typeTranslated = await translateName(type.url, this.language);
-		const damageClassTranslated = damage_class && (await translateName(type.url, this.language));
+		const damageClassTranslated =
+			damage_class && (await translateName(damage_class.url, this.language));
 
 		const isDamageClass = (damageClass: string): damageClass is DamageClass => {
 			return DamageClassValues.includes(damageClass as DamageClass);

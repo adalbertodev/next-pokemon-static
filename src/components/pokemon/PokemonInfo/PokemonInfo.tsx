@@ -1,23 +1,18 @@
 import { FC } from "react";
 
 import { SaveFavButton } from "@/components/ui";
+import { Table } from "@/components/ui/molecules";
 import { Pokemon } from "@/sections/Pokemon";
 
 import { PokemonCard } from "../PokemonCard";
 import {
 	Container,
 	DataCard,
-	DataCardBody,
-	DataCardHeader,
 	DataCardItemContainer,
 	ImageContainer,
 	MainCard,
-	MainCardBody,
-	MainCardHeader,
 	MainContainer,
 	MovesCard,
-	MovesCardBody,
-	MovesCardHeader,
 	MovesContainer,
 } from "./PokemonInfo.styles";
 
@@ -39,76 +34,90 @@ export const PokemonInfo: FC<Props> = ({ pokemon }) => {
 			</ImageContainer>
 
 			<MainContainer>
-				<MainCard>
-					<MainCardHeader>
-						<h1>{pokemon.name}</h1>
+				<MainCard
+					title={
+						<>
+							<h1>{pokemon.name}</h1>
 
-						<SaveFavButton>Guardar en Favoritos</SaveFavButton>
-					</MainCardHeader>
+							<SaveFavButton>Guardar en Favoritos</SaveFavButton>
+						</>
+					}
+					description={
+						<DataCard
+							title="Datos"
+							description={
+								<>
+									<DataCardItemContainer>
+										<p>Pokédex Nacional: </p>
+										<p>#{pokemon.id}</p>
+									</DataCardItemContainer>
 
-					<MainCardBody>
-						<DataCard>
-							<DataCardHeader>
-								<h3>Datos:</h3>
-							</DataCardHeader>
+									<DataCardItemContainer>
+										<p>Peso: </p>
+										<p>{pokemon.weight} kg</p>
+									</DataCardItemContainer>
 
-							<DataCardBody>
-								<DataCardItemContainer>
-									<p>Pokédex Nacional: </p>
-									<p>#{pokemon.id}</p>
-								</DataCardItemContainer>
+									<DataCardItemContainer>
+										<p>Altura: </p>
+										<p>{pokemon.height} m</p>
+									</DataCardItemContainer>
 
-								<DataCardItemContainer>
-									<p>Peso: </p>
-									<p>{pokemon.weight} kg</p>
-								</DataCardItemContainer>
+									<DataCardItemContainer>
+										<p>Tipos: </p>
+										<p>
+											{pokemon.types.map((type) => (
+												<span key={type.name}>{type.name}, </span>
+											))}
+										</p>
+									</DataCardItemContainer>
 
-								<DataCardItemContainer>
-									<p>Altura: </p>
-									<p>{pokemon.height} m</p>
-								</DataCardItemContainer>
-
-								<DataCardItemContainer>
-									<p>Tipos: </p>
-									<p>
-										{pokemon.types.map((type) => (
-											<span key={type.name}>{type.name}, </span>
-										))}
-									</p>
-								</DataCardItemContainer>
-
-								<DataCardItemContainer>
-									<p>Habilidad: </p>
-									<p>
-										{pokemon.abilities.map((ability) =>
-											ability.isHidden ? (
-												<strong key={ability.name}>{ability.name}, </strong>
-											) : (
-												<span key={ability.name}>{ability.name}, </span>
-											)
-										)}
-									</p>
-								</DataCardItemContainer>
-							</DataCardBody>
-						</DataCard>
-					</MainCardBody>
-				</MainCard>
+									<DataCardItemContainer>
+										<p>Habilidad: </p>
+										<p>
+											{pokemon.abilities.map((ability) =>
+												ability.isHidden ? (
+													<abbr key={ability.name} title="Habilidad Oculta">
+														{ability.name},{" "}
+													</abbr>
+												) : (
+													<span key={ability.name}>{ability.name}, </span>
+												)
+											)}
+										</p>
+									</DataCardItemContainer>
+								</>
+							}
+						/>
+					}
+				/>
 			</MainContainer>
 
 			<MovesContainer>
-				<MovesCard>
-					<MovesCardHeader>
-						<h3>Movimientos</h3>
-					</MovesCardHeader>
-
-					<MovesCardBody>
-						{pokemon.moves.learnByLevel.map((move) => (
-							<p key={move.name}>
-								{move.name} {move.versionDetails[1].learnedLevel} {move.versionDetails[1].version}
-							</p>
-						))}
-					</MovesCardBody>
-				</MovesCard>
+				<MovesCard
+					title="Movimientos"
+					description={
+						<Table
+							columns={[
+								{ key: "level", label: "Nivel" },
+								{ key: "move", label: "Movimiento" },
+								{ key: "type", label: "Tipo" },
+								{ key: "damageClass", label: "Clase" },
+								{ key: "power", label: "Poder" },
+								{ key: "accuracy", label: "Precisión" },
+							]}
+							rows={pokemon.moves.learnByLevel
+								.sort((moveA, moveB) => moveA.learnedLevel - moveB.learnedLevel)
+								.map((move) => ({
+									move: move.name,
+									type: move.type,
+									damageClass: move.damageClass ?? "unknown",
+									level: move.learnedLevel,
+									power: move.power === 0 ? "-" : move.power,
+									accuracy: move.accuracy === 0 ? "-" : move.accuracy,
+								}))}
+						/>
+					}
+				/>
 			</MovesContainer>
 		</Container>
 	);
