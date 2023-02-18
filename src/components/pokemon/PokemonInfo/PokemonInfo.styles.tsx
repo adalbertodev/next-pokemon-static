@@ -1,10 +1,10 @@
 import { Grid, Image } from "@nextui-org/react";
-import { FC } from "react";
+import React, { FC } from "react";
 
 import { Card, CardProps } from "@/components/ui/molecules/Card";
 
 interface CommonProps {
-	children: React.ReactNode;
+	children: string | JSX.Element | JSX.Element[];
 }
 
 export const Container: FC<CommonProps> = ({ children }) => {
@@ -91,6 +91,26 @@ export const DataCardItemContainer: FC<CommonProps> = ({ children }) => {
 			{children}
 		</Grid>
 	);
+};
+
+export const SpritesContainer: FC<CommonProps> = ({ children }) => {
+	return <Grid xs={12}>{children}</Grid>;
+};
+
+export const SpritesImagesContainer: FC<CommonProps> = ({ children }) => {
+	return (
+		<Grid.Container gap={0}>
+			{React.Children.map(children, (element, index) => (
+				<Grid xs={12} sm={6} md={3} key={`spriteimage-${index}`}>
+					{element}
+				</Grid>
+			))}
+		</Grid.Container>
+	);
+};
+
+export const SpritesCard: FC<CardProps> = ({ ...props }) => {
+	return <Card {...props} />;
 };
 
 export const MovesContainer: FC<CommonProps> = ({ children }) => {

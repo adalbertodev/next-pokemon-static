@@ -14,7 +14,7 @@ const DefaultPokemonCard: FC<VariantProps> = ({ pokemon, onClick }) => {
 	return (
 		<Card variant="default" onClick={onClick}>
 			<CardBody>
-				<CardImage src={pokemon.img} alt={pokemon.name} variant="default" />
+				<CardImage src={pokemon.img} alt={pokemon.name} />
 			</CardBody>
 		</Card>
 	);
@@ -24,7 +24,7 @@ const WithNamePokemonCard: FC<VariantProps> = ({ pokemon, onClick }) => {
 	return (
 		<Card variant="withName" onClick={onClick}>
 			<CardBody>
-				<CardImage src={pokemon.img} alt={pokemon.name} variant="withName" />
+				<CardImage src={pokemon.img} alt={pokemon.name} />
 			</CardBody>
 
 			<CardFooter>

@@ -1,3 +1,4 @@
+import { Image } from "@nextui-org/react";
 import { FC } from "react";
 
 import { SaveFavButton } from "@/components/ui";
@@ -14,6 +15,9 @@ import {
 	MainContainer,
 	MovesCard,
 	MovesContainer,
+	SpritesCard,
+	SpritesContainer,
+	SpritesImagesContainer,
 } from "./PokemonInfo.styles";
 
 interface Props {
@@ -91,6 +95,38 @@ export const PokemonInfo: FC<Props> = ({ pokemon }) => {
 					}
 				/>
 			</MainContainer>
+
+			<SpritesContainer>
+				<SpritesCard
+					title="Sprites"
+					description={
+						<SpritesImagesContainer>
+							{[
+								pokemon.sprites.frontMale,
+								pokemon.sprites.backMale,
+								pokemon.sprites.frontShinyMale,
+								pokemon.sprites.backShinyMale,
+								pokemon.sprites.frontFemale,
+								pokemon.sprites.backFemale,
+								pokemon.sprites.frontShinyFemale,
+								pokemon.sprites.backShinyFemale,
+							].map((sprite, index) =>
+								sprite !== null ? (
+									<Image
+										key={`sprite-${index}`}
+										src={sprite}
+										alt={pokemon.name}
+										width="100"
+										height="100"
+									/>
+								) : (
+									<></>
+								)
+							)}
+						</SpritesImagesContainer>
+					}
+				/>
+			</SpritesContainer>
 
 			<MovesContainer>
 				<MovesCard

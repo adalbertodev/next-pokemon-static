@@ -44,16 +44,19 @@ export const CardBody: FC<CardBodyProps> = ({ children }) => {
 interface CardImageProps {
 	src: string;
 	alt: string;
-	variant: "default" | "withName";
 }
 
-export const CardImage: FC<CardImageProps> = ({ src, alt, variant }) => {
+export const CardImage: FC<CardImageProps> = ({ src, alt }) => {
 	return (
 		<NextUICard.Image
 			src={src}
 			alt={alt}
 			width="100%"
-			height={variant === "withName" ? 140 : 200}
+			// height={variant === "withName" ? 140 : 200}
+			style={{
+				aspectRatio: "2/1",
+				objectFit: "contain",
+			}}
 		/>
 	);
 };
