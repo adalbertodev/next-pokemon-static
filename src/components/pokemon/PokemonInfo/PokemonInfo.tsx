@@ -1,5 +1,5 @@
 import { Image } from "@nextui-org/react";
-import { FC } from "react";
+import { FC, useMemo } from "react";
 
 import { SaveFavButton } from "@/components/ui";
 import { Table } from "@/components/ui/molecules";
@@ -25,6 +25,21 @@ interface Props {
 }
 
 export const PokemonInfo: FC<Props> = ({ pokemon }) => {
+	const pokemonSprites = useMemo(
+		() =>
+			[
+				pokemon.sprites.frontMale,
+				pokemon.sprites.backMale,
+				pokemon.sprites.frontShinyMale,
+				pokemon.sprites.backShinyMale,
+				pokemon.sprites.frontFemale,
+				pokemon.sprites.backFemale,
+				pokemon.sprites.frontShinyFemale,
+				pokemon.sprites.backShinyFemale,
+			].filter((sprite): sprite is string => sprite !== null),
+		[pokemon.sprites]
+	);
+
 	return (
 		<Container>
 			<ImageContainer>
@@ -101,28 +116,15 @@ export const PokemonInfo: FC<Props> = ({ pokemon }) => {
 					title="Sprites"
 					description={
 						<SpritesImagesContainer>
-							{[
-								pokemon.sprites.frontMale,
-								pokemon.sprites.backMale,
-								pokemon.sprites.frontShinyMale,
-								pokemon.sprites.backShinyMale,
-								pokemon.sprites.frontFemale,
-								pokemon.sprites.backFemale,
-								pokemon.sprites.frontShinyFemale,
-								pokemon.sprites.backShinyFemale,
-							].map((sprite, index) =>
-								sprite !== null ? (
-									<Image
-										key={`sprite-${index}`}
-										src={sprite}
-										alt={pokemon.name}
-										width="100"
-										height="100"
-									/>
-								) : (
-									<></>
-								)
-							)}
+							{pokemonSprites.map((sprite, index) => (
+								<Image
+									key={`${pokemon.name}-spriteimage-${index}`}
+									src={sprite}
+									alt={pokemon.name}
+									width="100"
+									height="100"
+								/>
+							))}
 						</SpritesImagesContainer>
 					}
 				/>

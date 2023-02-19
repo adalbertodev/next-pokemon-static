@@ -101,7 +101,7 @@ export const SpritesImagesContainer: FC<CommonProps> = ({ children }) => {
 	return (
 		<Grid.Container gap={0}>
 			{React.Children.map(children, (element, index) => (
-				<Grid xs={12} sm={6} md={3} key={`spriteimage-${index}`}>
+				<Grid xs={12} sm={6} md={3} key={`spritecontainer-${index}`}>
 					{element}
 				</Grid>
 			))}
