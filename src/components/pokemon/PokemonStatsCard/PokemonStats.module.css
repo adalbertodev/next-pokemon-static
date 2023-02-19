@@ -1,0 +1,31 @@
+.table {
+	width: 100%;
+}
+
+.table_row__head_cell {
+	min-width: 62px;
+	padding: 0 0.3em 0 0;
+	text-align: right;
+	font-weight: 400;
+	font-size: var(--nextui-fontSizes-sm);
+}
+
+.table_row__cell {
+	padding: 0 0.3em 0 0;
+}
+
+.table_row__cell:nth-child(2) {
+	font-weight: 700;
+	padding-left: 0.9em;
+	text-align: right;
+}
+
+.table_row__cell:nth-child(3) {
+	width: 100%;
+}
+
+.bar_stat {
+	height: 12px;
+	border-radius: 2px;
+	box-shadow: inset 1px 2px 0 rgb(255 255 255 / 40%), inset -1px -1px 0 rgb(0 0 0 / 30%);
+}

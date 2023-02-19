@@ -4,7 +4,7 @@ import { appFetch } from "@/utils";
 import {
 	Pokemon,
 	PokemonAbility,
-	PokemonMoves,
+	PokemonMove,
 	PokemonRepository,
 	PokemonStat,
 	PokemonType,
@@ -81,16 +81,34 @@ export class PokeApiPokemonRepository implements PokemonRepository {
 		return Promise.all(types.map(async ({ type }) => typeRepository.searchByUrl(type.url)));
 	};
 
-	private readonly getAppMoves = async (moves: PokeApiMove[]): Promise<PokemonMoves> => {
+	private readonly getAppMoves = async (moves: PokeApiMove[]): Promise<PokemonMove[]> => {
 		const moveRepository = new PokeApiMoveRepository();
+		const methods = [
+			{
+				key: "level-up",
+				label: "Nv.",
+			},
+			{
+				key: "machine",
+				label: "MT",
+			},
+			{
+				key: "tutor",
+				label: "Tutor",
+			},
+			{
+				key: "egg",
+				label: "Mov. Huevo",
+			},
+		];
 
-		const filterByMethod = (moves: PokeApiMove[], method: string): PokeApiMove[] => {
+		const filterByMethods = (moves: PokeApiMove[]): PokeApiMove[] => {
 			return moves
 				.map((move) => {
 					return {
 						...move,
-						version_group_details: move.version_group_details.filter(
-							({ move_learn_method }) => move_learn_method.name === method
+						version_group_details: move.version_group_details.filter(({ move_learn_method }) =>
+							methods.find((method) => method.key === move_learn_method.name)
 						),
 					};
 				})
@@ -125,22 +143,28 @@ export class PokeApiPokemonRepository implements PokemonRepository {
 				.filter((move) => move.version_group_details.length > 0);
 		};
 
-		const learnByLevel = filterByLastVersion(filterByMethod(moves, "level-up")).map(
-			async ({ move, version_group_details }) => ({
-				...(await moveRepository.searchByUrl(move.url)),
-				learnedLevel: version_group_details[0].level_learned_at,
-			})
+		const pokemonMoves = filterByLastVersion(filterByMethods(moves)).map(
+			async ({ move, version_group_details }) => {
+				const learnedMethod =
+					methods.find((method) => method.key === version_group_details[0].move_learn_method.name)
+						?.label ?? "—";
+
+				return {
+					...(await moveRepository.searchByUrl(move.url)),
+					learnedMethod:
+						learnedMethod === "Nv."
+							? `${learnedMethod} ${version_group_details[0].level_learned_at}`
+							: learnedMethod,
+				};
+			}
 		);
 
-		return {
-			learnByLevel: await Promise.all(learnByLevel),
-		};
+		return await Promise.all(pokemonMoves);
 	};
 
 	private readonly convertToAppStats = async (stats: PokeApiStat[]): Promise<PokemonStat[]> => {
-		const pokemonStats = stats.map(async ({ stat, base_stat, effort }) => ({
+		const pokemonStats = stats.map(async ({ stat, base_stat }) => ({
 			base: base_stat,
-			effort,
 			name: (await translateName(stat.url, this.language)) ?? stat.name,
 		}));
 

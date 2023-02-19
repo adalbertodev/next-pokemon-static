@@ -6,17 +6,12 @@ export interface PokemonAbility {
 	isHidden: boolean;
 }
 
-export interface PokemonMoves {
-	learnByLevel: PokemonMove[];
-}
-
 export interface PokemonStat {
 	name: string;
 	base: number;
-	effort: number;
 }
 
-interface PokemonSprites {
+export interface PokemonSprites {
 	default: string | null;
 
 	backFemale: string | null;
@@ -38,7 +33,7 @@ export interface Pokemon {
 	types: PokemonType[];
 	abilities: PokemonAbility[];
 
-	moves: PokemonMoves;
+	moves: PokemonMove[];
 	stats: PokemonStat[];
 	sprites: PokemonSprites;
 }

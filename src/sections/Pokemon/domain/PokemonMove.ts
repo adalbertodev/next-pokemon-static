@@ -10,8 +10,9 @@ export interface PokemonMoveBase {
 	damageClass: DamageClass | null;
 	power: number;
 	accuracy: number;
+	pp: number;
 }
 
 export interface PokemonMove extends PokemonMoveBase {
-	learnedLevel: number;
+	learnedMethod: string;
 }

@@ -48,7 +48,15 @@ interface CardImageProps {
 }
 
 export const CardImage: FC<CardImageProps> = ({ src, alt, withName = false }) => {
-	return <NextUICard.Image src={src} alt={alt} width="100%" height={withName ? 140 : 200} />;
+	return (
+		<NextUICard.Image
+			src={src}
+			alt={alt}
+			width="100%"
+			height={withName ? 120 : 240}
+			css={{ objectFit: "contain" }}
+		/>
+	);
 };
 
 // CARD FOOTER

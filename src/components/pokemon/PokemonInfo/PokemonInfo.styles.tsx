@@ -1,4 +1,4 @@
-import { Grid, Image } from "@nextui-org/react";
+import { Grid } from "@nextui-org/react";
 import React, { FC } from "react";
 
 import { Card, CardProps } from "@/components/ui/molecules/Card";
@@ -25,9 +25,9 @@ export const Container: FC<CommonProps> = ({ children }) => {
 	);
 };
 
-export const ImageContainer: FC<CommonProps> = ({ children }) => {
+export const PokemonImageContainer: FC<CommonProps> = ({ children }) => {
 	return (
-		<Grid xs={12} sm={4}>
+		<Grid xs={12} sm={4} lg={3}>
 			{children}
 		</Grid>
 	);
@@ -35,7 +35,7 @@ export const ImageContainer: FC<CommonProps> = ({ children }) => {
 
 export const MainContainer: FC<CommonProps> = ({ children }) => {
 	return (
-		<Grid xs={12} sm={8}>
+		<Grid xs={12} sm={8} lg={9}>
 			{children}
 		</Grid>
 	);
@@ -53,79 +53,36 @@ export const MainCard: FC<CardProps> = ({ titleCSS, ...props }) => {
 				},
 				...titleCSS,
 			}}
-			{...props}
-		/>
-	);
-};
-
-export const DataCard: FC<CardProps> = ({ css, description, ...props }) => {
-	return (
-		<Card
-			css={{ filter: "none", ...css }}
-			description={<Grid.Container>{description}</Grid.Container>}
-			{...props}
-		/>
-	);
-};
-
-export const DataCardItemContainer: FC<CommonProps> = ({ children }) => {
-	return (
-		<Grid
-			xs={12}
-			sm={6}
-			md={4}
-			css={{
-				display: "flex",
-				gap: "var(--nextui-space-4)",
-
-				"& p": {
-					letterSpacing: "var(--nextui-letterSpacings-tight)",
-				},
-
-				"& p:first-child": {
-					color: "var(--nextui-colors-primary)",
-					fontWeight: "var(--nextui-fontWeights-bold)",
+			descriptionCSS={{
+				"& div[role=section]": {
+					filter: "none",
 				},
 			}}
-		>
+			{...props}
+		/>
+	);
+};
+
+export const MainCardContainer: FC<CommonProps> = ({ children }) => {
+	return <Grid.Container gap={2}>{children}</Grid.Container>;
+};
+
+export const MainCardSection: FC<CommonProps> = ({ children }) => {
+	return (
+		<Grid xs={12} sm={6}>
 			{children}
 		</Grid>
 	);
 };
 
 export const SpritesContainer: FC<CommonProps> = ({ children }) => {
-	return <Grid xs={12}>{children}</Grid>;
-};
-
-export const SpritesImagesContainer: FC<CommonProps> = ({ children }) => {
 	return (
-		<Grid.Container gap={0}>
-			{React.Children.map(children, (element, index) => (
-				<Grid xs={12} sm={6} md={3} key={`spritecontainer-${index}`}>
-					{element}
-				</Grid>
-			))}
-		</Grid.Container>
+		<Grid xs={12} sm={6}>
+			{children}
+		</Grid>
 	);
-};
-
-export const SpritesCard: FC<CardProps> = ({ ...props }) => {
-	return <Card {...props} />;
 };
 
 export const MovesContainer: FC<CommonProps> = ({ children }) => {
 	return <Grid xs={12}>{children}</Grid>;
-};
-
-export const MovesCard: FC<CardProps> = ({ ...props }) => {
-	return <Card {...props} />;
-};
-
-interface SpriteImageProps {
-	src: string;
-	alt: string;
-}
-
-export const SpriteImage: FC<SpriteImageProps> = ({ src, alt }) => {
-	return <Image src={src} alt={alt} width={100} height={100} />;
 };

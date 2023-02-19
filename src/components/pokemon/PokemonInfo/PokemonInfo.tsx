@@ -1,23 +1,22 @@
-import { Image } from "@nextui-org/react";
-import { FC, useMemo } from "react";
+import { FC } from "react";
 
 import { SaveFavButton } from "@/components/ui";
-import { Table } from "@/components/ui/molecules";
 import { Pokemon } from "@/sections/Pokemon";
 
 import { PokemonCard } from "../PokemonCard";
+import { PokemonDataCard } from "../PokemonDataCard";
+import { PokemonMovesCard } from "../PokemonMovesCard";
+import { PokemonSpritesCard } from "../PokemonSpritesCard";
+import { PokemonStatsCard } from "../PokemonStatsCard";
 import {
 	Container,
-	DataCard,
-	DataCardItemContainer,
-	ImageContainer,
 	MainCard,
+	MainCardContainer,
+	MainCardSection,
 	MainContainer,
-	MovesCard,
 	MovesContainer,
-	SpritesCard,
+	PokemonImageContainer,
 	SpritesContainer,
-	SpritesImagesContainer,
 } from "./PokemonInfo.styles";
 
 interface Props {
@@ -25,24 +24,9 @@ interface Props {
 }
 
 export const PokemonInfo: FC<Props> = ({ pokemon }) => {
-	const pokemonSprites = useMemo(
-		() =>
-			[
-				pokemon.sprites.frontMale,
-				pokemon.sprites.backMale,
-				pokemon.sprites.frontShinyMale,
-				pokemon.sprites.backShinyMale,
-				pokemon.sprites.frontFemale,
-				pokemon.sprites.backFemale,
-				pokemon.sprites.frontShinyFemale,
-				pokemon.sprites.backShinyFemale,
-			].filter((sprite): sprite is string => sprite !== null),
-		[pokemon.sprites]
-	);
-
 	return (
 		<Container>
-			<ImageContainer>
+			<PokemonImageContainer>
 				<PokemonCard
 					pokemon={{
 						id: pokemon.id,
@@ -50,7 +34,7 @@ export const PokemonInfo: FC<Props> = ({ pokemon }) => {
 						name: pokemon.name,
 					}}
 				/>
-			</ImageContainer>
+			</PokemonImageContainer>
 
 			<MainContainer>
 				<MainCard
@@ -62,100 +46,25 @@ export const PokemonInfo: FC<Props> = ({ pokemon }) => {
 						</>
 					}
 					description={
-						<DataCard
-							title="Datos"
-							description={
-								<>
-									<DataCardItemContainer>
-										<p>Pokédex Nacional: </p>
-										<p>#{pokemon.id}</p>
-									</DataCardItemContainer>
+						<MainCardContainer>
+							<MainCardSection>
+								<PokemonDataCard pokemon={pokemon} />
+							</MainCardSection>
 
-									<DataCardItemContainer>
-										<p>Peso: </p>
-										<p>{pokemon.weight} kg</p>
-									</DataCardItemContainer>
-
-									<DataCardItemContainer>
-										<p>Altura: </p>
-										<p>{pokemon.height} m</p>
-									</DataCardItemContainer>
-
-									<DataCardItemContainer>
-										<p>Tipos: </p>
-										<p>
-											{pokemon.types.map((type) => (
-												<span key={type.name}>{type.name}, </span>
-											))}
-										</p>
-									</DataCardItemContainer>
-
-									<DataCardItemContainer>
-										<p>Habilidad: </p>
-										<p>
-											{pokemon.abilities.map((ability) =>
-												ability.isHidden ? (
-													<abbr key={ability.name} title="Habilidad Oculta">
-														{ability.name},{" "}
-													</abbr>
-												) : (
-													<span key={ability.name}>{ability.name}, </span>
-												)
-											)}
-										</p>
-									</DataCardItemContainer>
-								</>
-							}
-						/>
+							<MainCardSection>
+								<PokemonStatsCard stats={pokemon.stats} />
+							</MainCardSection>
+						</MainCardContainer>
 					}
 				/>
 			</MainContainer>
 
 			<SpritesContainer>
-				<SpritesCard
-					title="Sprites"
-					description={
-						<SpritesImagesContainer>
-							{pokemonSprites.map((sprite, index) => (
-								<Image
-									key={`${pokemon.name}-spriteimage-${index}`}
-									src={sprite}
-									alt={pokemon.name}
-									width="100"
-									height="100"
-								/>
-							))}
-						</SpritesImagesContainer>
-					}
-				/>
+				<PokemonSpritesCard name={pokemon.name} sprites={pokemon.sprites} />
 			</SpritesContainer>
 
 			<MovesContainer>
-				<MovesCard
-					title="Movimientos"
-					description={
-						<Table
-							columns={[
-								{ key: "level", label: "Nivel" },
-								{ key: "move", label: "Movimiento" },
-								{ key: "type", label: "Tipo" },
-								{ key: "damageClass", label: "Clase" },
-								{ key: "power", label: "Poder" },
-								{ key: "accuracy", label: "Precisión" },
-							]}
-							rows={pokemon.moves.learnByLevel
-								.sort((moveA, moveB) => moveA.learnedLevel - moveB.learnedLevel)
-								.map((move) => ({
-									move: move.name,
-									type: move.type,
-									damageClass: move.damageClass ?? "unknown",
-									level: move.learnedLevel,
-									power: move.power === 0 ? "-" : move.power,
-									accuracy: move.accuracy === 0 ? "-" : move.accuracy,
-								}))}
-						/>
-					}
-				/>
+				<PokemonMovesCard moves={pokemon.moves} />
 			</MovesContainer>
 		</Container>
 	);

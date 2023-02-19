@@ -26,7 +26,7 @@ export class PokeApiMoveRepository {
 	private readonly pokeApiToApp = async (
 		pokeApiMove: PokeApiPokemonMove
 	): Promise<PokemonMoveBase> => {
-		const { names, type, damage_class, name, power, accuracy } = pokeApiMove;
+		const { names, type, damage_class, name, power, accuracy, pp } = pokeApiMove;
 
 		const typeTranslated = await translateName(type.url, this.language);
 		const damageClassTranslated =
@@ -45,6 +45,7 @@ export class PokeApiMoveRepository {
 					: null,
 			power: power ?? 0,
 			accuracy: accuracy ?? 0,
+			pp: pp ?? 0,
 		};
 	};
 }

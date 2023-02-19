@@ -6,7 +6,7 @@ import { Card as StyledCard, CardBody, CardHeader } from "./Card.styles";
 export interface CardProps {
 	css?: CSS;
 
-	title: React.ReactNode | string;
+	title?: React.ReactNode | string;
 	titleCSS?: CSS;
 
 	description: React.ReactNode;

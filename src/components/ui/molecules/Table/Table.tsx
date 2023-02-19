@@ -8,7 +8,7 @@ interface Column {
 }
 
 interface Row {
-	[key: string]: string | number;
+	[key: string]: React.ReactNode;
 }
 
 interface Props {
@@ -24,7 +24,7 @@ export const Table: FC<Props> = ({ columns, rows }) => {
 					<tr className={styles.table_head__row} role="row">
 						{columns.map((column) => (
 							<th
-								className={styles.table_head__column}
+								className={styles.table_head__cell}
 								key={column.key}
 								tabIndex={-1}
 								role="columnHeader"
@@ -36,17 +36,12 @@ export const Table: FC<Props> = ({ columns, rows }) => {
 				</thead>
 
 				<tbody className={styles.table_body} role="rowgroup">
-					{rows.map((row, index) => (
-						<tr
-							className={styles.table_body__row}
-							key={`tablerow-${index}`}
-							tabIndex={-1}
-							role="row"
-						>
-							{columns.map((column, index) => (
+					{rows.map((row, rowIndex) => (
+						<tr className={styles.table_body__row} key={`row-${rowIndex}`} tabIndex={-1} role="row">
+							{columns.map((column, cellIndex) => (
 								<td
-									className={styles.table_body__column}
-									key={`${index}-${row[column.key]}`}
+									className={styles.table_body__cell}
+									key={`row-${rowIndex}_cell-${cellIndex}`}
 									tabIndex={-1}
 									role="rowheader"
 								>
