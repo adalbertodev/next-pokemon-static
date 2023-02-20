@@ -2,10 +2,10 @@ import { GetStaticProps, GetStaticPropsContext, NextPage } from "next";
 
 import { PokemonCardList } from "@/components/pokemon";
 import { Layout } from "@/components/ui/templates";
-import { PokeApiPokemonListRepository, PokemonItem } from "@/sections/PokemonList";
+import { PokeApiPokemonListRepository, SmallPokemon } from "@/sections/PokemonList";
 
 interface Props {
-	pokemons: PokemonItem[];
+	pokemons: SmallPokemon[];
 }
 
 const HomePage: NextPage<Props> = ({ pokemons }) => {

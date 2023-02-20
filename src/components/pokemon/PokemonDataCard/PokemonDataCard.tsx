@@ -1,10 +1,11 @@
+import { Grid } from "@nextui-org/react";
 import { FC, useMemo } from "react";
 
 import { Card } from "@/components/ui/molecules/Card";
 import { TypeList } from "@/components/ui/molecules/TypeList";
 import { Pokemon } from "@/sections/Pokemon";
 
-import { DataContainer, DataItem } from "./PokemonDataCard.styles";
+import styles from "./PokemonDataCard.module.css";
 
 interface Props {
 	pokemon: Pokemon;
@@ -34,10 +35,10 @@ export const PokemonDataCard: FC<Props> = ({ pokemon }) => {
 				value: pokemon.abilities.map((ability) =>
 					ability.isHidden ? (
 						<abbr key={ability.name} title="Habilidad Oculta">
-							{ability.name},{" "}
+							{ability.name}
 						</abbr>
 					) : (
-						<span key={ability.name}>{ability.name}, </span>
+						<span key={ability.name}>{ability.name}</span>
 					)
 				),
 			},
@@ -49,14 +50,19 @@ export const PokemonDataCard: FC<Props> = ({ pokemon }) => {
 		<Card
 			title="Datos"
 			description={
-				<DataContainer>
+				<Grid.Container className={styles.grid_container}>
 					{pokemonData.map((data) => (
-						<DataItem key={data.label}>
-							<p>{data.label}:</p>
-							<div>{data.value}</div>
-						</DataItem>
+						<Grid xs={12} sm={6} key={data.label} className={styles.grid_item}>
+							<label htmlFor={`data-${data.label}`} className={styles.data_card__label}>
+								{data.label}:
+							</label>
+
+							<div id={`data-${data.label}`} className={styles.data_card__value}>
+								{data.value}
+							</div>
+						</Grid>
 					))}
-				</DataContainer>
+				</Grid.Container>
 			}
 		/>
 	);

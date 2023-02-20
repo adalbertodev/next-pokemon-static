@@ -1,8 +1,9 @@
 import { FC } from "react";
 
+import { DamageClass } from "@/components/ui/atoms/DamageClass";
+import { Type } from "@/components/ui/atoms/Type";
 import { Card } from "@/components/ui/molecules/Card";
 import { Table } from "@/components/ui/molecules/Table";
-import { TypeList } from "@/components/ui/molecules/TypeList";
 import { PokemonMove } from "@/sections/Pokemon";
 
 interface Props {
@@ -15,7 +16,7 @@ export const PokemonMovesCard: FC<Props> = ({ moves }) => {
 			{ key: "Nv.", value: 1 },
 			{ key: "MT", value: 2 },
 			{ key: "Tutor", value: 3 },
-			{ key: "Mov. Huevo", value: 4 },
+			{ key: "Huevo", value: 4 },
 		];
 
 		const moveAValue =
@@ -49,8 +50,16 @@ export const PokemonMovesCard: FC<Props> = ({ moves }) => {
 					]}
 					rows={sortedMoves.map((move) => ({
 						move: move.name,
-						type: <TypeList types={[move.type]} />,
-						damageClass: move.damageClass ?? "unknown",
+						type: (
+							<div style={{ fontSize: "12px" }}>
+								<Type type={move.type} />
+							</div>
+						),
+						damageClass: move.damageClass ? (
+							<DamageClass damageClass={move.damageClass} />
+						) : (
+							"unknown"
+						),
 						learnedMethod: move.learnedMethod,
 						power: move.power === 0 ? "—" : move.power,
 						accuracy: move.accuracy === 0 ? "—" : `${move.accuracy}%`,

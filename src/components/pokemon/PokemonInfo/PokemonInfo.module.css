@@ -1,0 +1,17 @@
+.grid_container {
+	width: 100%;
+	margin: 0;
+}
+
+.main_card__title {
+	display: flex;
+	justify-content: space-between;
+}
+
+.main_card__title h1 {
+	text-transform: capitalize;
+}
+
+.main_card__description div[role="section"] {
+	filter: none;
+}

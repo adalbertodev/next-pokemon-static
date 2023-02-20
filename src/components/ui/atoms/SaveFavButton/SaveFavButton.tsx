@@ -1,11 +1,14 @@
+import { Button } from "@nextui-org/react";
 import { FC } from "react";
-
-import { Button } from "./SaveFavButton.styles";
 
 interface Props {
 	children: React.ReactNode;
 }
 
 export const SaveFavButton: FC<Props> = ({ children }) => {
-	return <Button>{children}</Button>;
+	return (
+		<Button color="gradient" ghost>
+			{children}
+		</Button>
+	);
 };

@@ -1,29 +1,39 @@
-import { CSS } from "@nextui-org/react";
+import { Card as NextUICard } from "@nextui-org/react";
 import { FC, useMemo } from "react";
 
-import { Card as StyledCard, CardBody, CardHeader } from "./Card.styles";
+import styles from "./Card.module.css";
 
 export interface CardProps {
-	css?: CSS;
+	className?: string;
 
-	title?: React.ReactNode | string;
-	titleCSS?: CSS;
+	title?: React.ReactNode;
+	titleClass?: string;
 
 	description: React.ReactNode;
-	descriptionCSS?: CSS;
+	descriptionClass?: string;
 }
 
-export const Card: FC<CardProps> = ({ css, title, titleCSS, description, descriptionCSS }) => {
+export const Card: FC<CardProps> = ({
+	className,
+	title,
+	titleClass,
+	description,
+	descriptionClass,
+}) => {
 	const renderTitle = useMemo(
 		() => (typeof title === "string" ? <h3>{title}</h3> : title),
 		[title]
 	);
 
 	return (
-		<StyledCard css={css}>
-			<CardHeader css={titleCSS}>{renderTitle}</CardHeader>
+		<NextUICard className={className}>
+			<NextUICard.Header className={titleClass}>{renderTitle}</NextUICard.Header>
 
-			<CardBody css={descriptionCSS}>{description}</CardBody>
-		</StyledCard>
+			<NextUICard.Body
+				className={`${styles.card_body} ${descriptionClass ? descriptionClass : ""}`}
+			>
+				{description}
+			</NextUICard.Body>
+		</NextUICard>
 	);
 };

@@ -1,0 +1,9 @@
+.card {
+	padding: var(--nextui-space-lg);
+}
+
+.card_body {
+	justify-content: center;
+	padding: var(--nextui-space-1);
+	padding-top: var(--nextui-space-7);
+}

@@ -1,0 +1,3 @@
+.card_body {
+	padding: var(--nextui-space-sm) var(--nextui-space-lg);
+}

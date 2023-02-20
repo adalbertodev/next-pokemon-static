@@ -1,23 +1,16 @@
+import { Grid } from "@nextui-org/react";
 import { FC } from "react";
 
 import { SaveFavButton } from "@/components/ui";
+import { Card } from "@/components/ui/molecules/Card";
 import { Pokemon } from "@/sections/Pokemon";
 
-import { PokemonCard } from "../PokemonCard";
 import { PokemonDataCard } from "../PokemonDataCard";
+import { PokemonImageCard } from "../PokemonImageCard";
 import { PokemonMovesCard } from "../PokemonMovesCard";
 import { PokemonSpritesCard } from "../PokemonSpritesCard";
 import { PokemonStatsCard } from "../PokemonStatsCard";
-import {
-	Container,
-	MainCard,
-	MainCardContainer,
-	MainCardSection,
-	MainContainer,
-	MovesContainer,
-	PokemonImageContainer,
-	SpritesContainer,
-} from "./PokemonInfo.styles";
+import styles from "./PokemonInfo.module.css";
 
 interface Props {
 	pokemon: Pokemon;
@@ -25,19 +18,21 @@ interface Props {
 
 export const PokemonInfo: FC<Props> = ({ pokemon }) => {
 	return (
-		<Container>
-			<PokemonImageContainer>
-				<PokemonCard
+		<Grid.Container gap={2} className={styles.grid_container}>
+			<Grid xs={12} md={3}>
+				<PokemonImageCard
 					pokemon={{
 						id: pokemon.id,
-						img: pokemon.sprites.default ?? "/no-image.png",
+						img: pokemon.sprites.default ?? pokemon.sprites.frontMale ?? "/no-image.png",
 						name: pokemon.name,
 					}}
 				/>
-			</PokemonImageContainer>
+			</Grid>
 
-			<MainContainer>
-				<MainCard
+			<Grid xs={12} md={9}>
+				<Card
+					titleClass={styles.main_card__title}
+					descriptionClass={styles.main_card__description}
 					title={
 						<>
 							<h1>{pokemon.name}</h1>
@@ -46,26 +41,26 @@ export const PokemonInfo: FC<Props> = ({ pokemon }) => {
 						</>
 					}
 					description={
-						<MainCardContainer>
-							<MainCardSection>
+						<Grid.Container gap={2}>
+							<Grid xs={6} sm={7} md={7} lg={6}>
 								<PokemonDataCard pokemon={pokemon} />
-							</MainCardSection>
+							</Grid>
 
-							<MainCardSection>
+							<Grid xs={6} sm={5} md={5} lg={6}>
 								<PokemonStatsCard stats={pokemon.stats} />
-							</MainCardSection>
-						</MainCardContainer>
+							</Grid>
+						</Grid.Container>
 					}
 				/>
-			</MainContainer>
+			</Grid>
 
-			<SpritesContainer>
+			<Grid xs={12} sm={6}>
 				<PokemonSpritesCard name={pokemon.name} sprites={pokemon.sprites} />
-			</SpritesContainer>
+			</Grid>
 
-			<MovesContainer>
+			<Grid xs={12}>
 				<PokemonMovesCard moves={pokemon.moves} />
-			</MovesContainer>
-		</Container>
+			</Grid>
+		</Grid.Container>
 	);
 };

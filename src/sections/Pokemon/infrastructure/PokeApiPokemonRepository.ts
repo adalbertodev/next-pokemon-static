@@ -98,7 +98,7 @@ export class PokeApiPokemonRepository implements PokemonRepository {
 			},
 			{
 				key: "egg",
-				label: "Mov. Huevo",
+				label: "Huevo",
 			},
 		];
 

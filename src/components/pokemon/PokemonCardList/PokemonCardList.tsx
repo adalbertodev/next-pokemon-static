@@ -1,22 +1,23 @@
+import { Grid } from "@nextui-org/react";
 import { FC } from "react";
 
-import { PokemonItem } from "@/sections/PokemonList";
+import { SmallPokemon } from "@/sections/PokemonList";
 
-import { PokemonCard } from "../PokemonCard/PokemonCard";
-import { CardContainer, Container } from "./PokemonCardList.styles";
+import { PokemonSmallCard } from "../PokemonSmallCard";
+import styles from "./PokemonCardList.module.css";
 
 interface Props {
-	pokemons: PokemonItem[];
+	pokemons: SmallPokemon[];
 }
 
 export const PokemonCardList: FC<Props> = ({ pokemons }) => {
 	return (
-		<Container>
+		<Grid.Container gap={2} className={styles.grid_container}>
 			{pokemons.map((pokemon) => (
-				<CardContainer key={pokemon.id}>
-					<PokemonCard pokemon={pokemon} variant="withName" />
-				</CardContainer>
+				<Grid xs={6} sm={4} md={2} xl={1.2} key={pokemon.id}>
+					<PokemonSmallCard pokemon={pokemon} />
+				</Grid>
 			))}
-		</Container>
+		</Grid.Container>
 	);
 };
