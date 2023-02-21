@@ -1,10 +1,8 @@
-import { Image } from "@nextui-org/react";
+import { Grid, Image } from "@nextui-org/react";
 import { FC, useMemo } from "react";
 
 import { Card } from "@/components/ui/molecules/Card";
 import { PokemonSprites } from "@/sections/Pokemon";
-
-import { SpriteImageContainer, SpriteImagesContainer } from "./PokemonSpritesCard.styles";
 
 interface Props {
 	name: string;
@@ -41,13 +39,13 @@ export const PokemonSpritesCard: FC<Props> = ({ name, sprites }) => {
 		<Card
 			title="Sprites"
 			description={
-				<SpriteImagesContainer>
+				<Grid.Container gap={0}>
 					{pokemonSprites.map((sprite) => (
-						<SpriteImageContainer key={`${name}-spriteimage-${sprite.label}`}>
+						<Grid xs={6} sm={3} key={`${name}-spriteimage-${sprite.label}`}>
 							<Image src={sprite.img} alt={name} width="100" height="100" />
-						</SpriteImageContainer>
+						</Grid>
 					))}
-				</SpriteImagesContainer>
+				</Grid.Container>
 			}
 		/>
 	);

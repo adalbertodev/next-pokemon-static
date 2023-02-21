@@ -4,6 +4,8 @@ import { FC, useCallback } from "react";
 
 import { SmallPokemon } from "@/sections/PokemonList";
 
+import styles from "./PokemonSmallCard.module.css";
+
 interface Props {
 	pokemon: SmallPokemon;
 }
@@ -16,37 +18,21 @@ export const PokemonSmallCard: FC<Props> = ({ pokemon }) => {
 	}, [pokemon.id, router]);
 
 	return (
-		<Card isHoverable isPressable onClick={onPokemonCardClick} css={{ padding: "0" }}>
-			<Card.Body
-				css={{
-					justifyContent: "center",
-					padding: "var(--nextui-space-1)",
-					paddingTop: "var(--nextui-space-7)",
-				}}
-			>
+		<Card isHoverable isPressable onClick={onPokemonCardClick} className={styles.card}>
+			<Card.Body className={styles.card_body}>
 				<Card.Image
 					src={pokemon.img}
 					alt={pokemon.name}
 					width="100%"
 					height={120}
-					css={{ objectFit: "contain" }}
+					objectFit="contain"
 				/>
 			</Card.Body>
 
-			<Card.Footer
-				css={{
-					justifyContent: "space-between",
-				}}
-			>
+			<Card.Footer className={styles.card_footer}>
 				<p>#{pokemon.id}</p>
 
-				<Text
-					transform="capitalize"
-					css={{
-						fontWeight: "bold",
-						letterSpacing: "var(--nextui-letterSpacings-normal)",
-					}}
-				>
+				<Text transform="capitalize" className={styles.card_footer__name}>
 					{pokemon.name}
 				</Text>
 			</Card.Footer>

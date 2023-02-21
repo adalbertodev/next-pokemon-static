@@ -30,4 +30,5 @@
 .data_card__value:has(span) {
 	display: flex;
 	flex-direction: column;
+	align-items: flex-start;
 }

@@ -25,7 +25,32 @@
 }
 
 .bar_stat {
-	height: 12px;
+	--bar-width: 255;
+	--bar-color: var(--nextui-colors-red500);
+
+	background-color: var(--bar-color);
 	border-radius: 2px;
 	box-shadow: inset 1px 2px 0 rgb(255 255 255 / 40%), inset -1px -1px 0 rgb(0 0 0 / 30%);
+	height: 12px;
+	width: calc(100% * var(--bar-width) / 255);
+}
+
+.greater_than_100 {
+	--bar-color: var(--nextui-colors-green800);
+}
+
+.greater_than_80 {
+	--bar-color: var(--nextui-colors-green600);
+}
+
+.greater_than_60 {
+	--bar-color: var(--nextui-colors-yellow800);
+}
+
+.greater_than_40 {
+	--bar-color: var(--nextui-colors-yellow600);
+}
+
+.greater_than_0 {
+	--bar-color: var(--nextui-colors-red500);
 }

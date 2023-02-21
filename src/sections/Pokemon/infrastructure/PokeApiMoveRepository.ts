@@ -37,7 +37,7 @@ export class PokeApiMoveRepository {
 		};
 
 		return {
-			name: names.find((name) => name.language.name === this.language)?.name ?? name,
+			name: (await translateName(names, this.language)) ?? name,
 			type: typeTranslated && isType(typeTranslated) ? typeTranslated : "Normal",
 			damageClass:
 				damageClassTranslated && isDamageClass(damageClassTranslated)

@@ -1,4 +1,4 @@
-import { FC, useCallback, useMemo } from "react";
+import { CSSProperties, FC, useCallback, useMemo } from "react";
 
 import { Card } from "@/components/ui/molecules/Card";
 import { PokemonStat } from "@/sections/Pokemon";
@@ -10,7 +10,7 @@ interface Props {
 }
 
 export const PokemonStatsCard: FC<Props> = ({ stats }) => {
-	const restructuredStats = useMemo(
+	const restructuredStatsName = useMemo(
 		() =>
 			stats.map((stat) => ({
 				label:
@@ -24,21 +24,8 @@ export const PokemonStatsCard: FC<Props> = ({ stats }) => {
 		[stats]
 	);
 
-	const barColor = useCallback((value: number) => {
-		if (value > 100) {
-			return "--nextui-colors-green800";
-		}
-		if (value > 80) {
-			return "--nextui-colors-green600";
-		}
-		if (value > 60) {
-			return "--nextui-colors-yellow800";
-		}
-		if (value > 40) {
-			return "--nextui-colors-yellow600";
-		}
-
-		return "--nextui-colors-red500";
+	const barColorValue = useCallback((value: number) => {
+		return value > 100 ? 100 : value > 80 ? 80 : value > 60 ? 60 : value > 40 ? 40 : 0;
 	}, []);
 
 	return (
@@ -46,7 +33,7 @@ export const PokemonStatsCard: FC<Props> = ({ stats }) => {
 			description={
 				<table className={styles.table}>
 					<tbody>
-						{restructuredStats.map((stat) => (
+						{restructuredStatsName.map((stat) => (
 							<tr key={stat.label}>
 								<th className={styles.table_row__head_cell}>{stat.label}:</th>
 
@@ -54,11 +41,14 @@ export const PokemonStatsCard: FC<Props> = ({ stats }) => {
 
 								<td className={styles.table_row__cell}>
 									<div
-										className={styles.bar_stat}
-										style={{
-											backgroundColor: `var(${barColor(stat.value)})`,
-											width: `calc(100% * ${stat.value} / 255)`,
-										}}
+										className={`${styles.bar_stat} ${
+											styles[`greater_than_${barColorValue(stat.value)}`]
+										}`}
+										style={
+											{
+												"--bar-width": stat.value,
+											} as CSSProperties
+										}
 									></div>
 								</td>
 							</tr>

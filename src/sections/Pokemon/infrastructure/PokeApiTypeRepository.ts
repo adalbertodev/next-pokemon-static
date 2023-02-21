@@ -26,7 +26,7 @@ export class PokeApiTypeRepository {
 	private readonly pokeApiToApp = async (pokeApiType: PokeApiPokemonType): Promise<PokemonType> => {
 		const { names, damage_relations } = pokeApiType;
 
-		const translatedName = names.find((name) => name.language.name === this.language)?.name;
+		const translatedName = await translateName(names, this.language);
 
 		return {
 			name: translatedName && isType(translatedName) ? translatedName : "Normal",
