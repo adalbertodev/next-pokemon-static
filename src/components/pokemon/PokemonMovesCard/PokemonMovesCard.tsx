@@ -6,6 +6,8 @@ import { Card } from "@/components/ui/molecules/Card";
 import { Table } from "@/components/ui/molecules/Table";
 import { PokemonMove } from "@/sections/Pokemon";
 
+import styles from "./PokemonMovesCard.module.css";
+
 interface Props {
 	moves: PokemonMove[];
 }
@@ -39,14 +41,15 @@ export const PokemonMovesCard: FC<Props> = ({ moves }) => {
 			title="Movimientos"
 			description={
 				<Table
+					align="center"
 					columns={[
-						{ key: "learnedMethod", label: "Método" },
-						{ key: "move", label: "Movimiento" },
-						{ key: "type", label: "Tipo" },
-						{ key: "damageClass", label: "Clase" },
-						{ key: "power", label: "Poder" },
-						{ key: "accuracy", label: "Precisión" },
-						{ key: "pp", label: "PP" },
+						{ key: "learnedMethod", label: "Método", className: styles.method },
+						{ key: "move", label: "Movimiento", className: styles.move },
+						{ key: "type", label: "Tipo", className: styles.type },
+						{ key: "damageClass", label: "Clase", className: styles.damage_class },
+						{ key: "power", label: "Poder", className: styles.power },
+						{ key: "accuracy", label: "Precisión", className: styles.accuracy },
+						{ key: "pp", label: "PP", className: styles.pp },
 					]}
 					rows={sortedMoves.map((move) => ({
 						move: move.name,
@@ -56,7 +59,9 @@ export const PokemonMovesCard: FC<Props> = ({ moves }) => {
 							</div>
 						),
 						damageClass: move.damageClass ? (
-							<DamageClass damageClass={move.damageClass} />
+							<div className={styles.damage_class__box}>
+								<DamageClass damageClass={move.damageClass} />
+							</div>
 						) : (
 							"unknown"
 						),

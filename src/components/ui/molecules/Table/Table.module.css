@@ -29,10 +29,22 @@
 	color: var(--nextui-colors-accents7);
 	cursor: default;
 	font-size: var(--nextui-fontSizes-xs);
+	padding-right: var(--nextui-space-5);
 	height: var(--nextui-space-12);
 	outline: none;
 	position: relative;
+}
+
+.table_head__cell--lefted {
 	text-align: left;
+}
+
+.table_head__cell--centered {
+	text-align: center;
+}
+
+.table_head__cell--righted {
+	text-align: right;
 }
 
 .table_head__cell:first-child {
@@ -69,6 +81,18 @@
 	vertical-align: bottom;
 	white-space: nowrap;
 	z-index: var(--nextui-zIndices-2);
+}
+
+.table_body__cell--lefted {
+	text-align: left;
+}
+
+.table_body__cell--centered {
+	text-align: center;
+}
+
+.table_body__cell--righted {
+	text-align: right;
 }
 
 .table_body__cell:first-child {

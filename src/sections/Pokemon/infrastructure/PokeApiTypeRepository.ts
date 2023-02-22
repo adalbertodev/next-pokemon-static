@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import { appFetch } from "@/utils";
 
-import { PokemonType, Type } from "../domain";
+import { PokemonTypeWithRelations, Type } from "../domain";
 import { PokeApiNamedResource, PokeApiPokemonType } from "./PokeApi";
 import { isType, translateName } from "./utils";
 
@@ -9,7 +9,7 @@ export class PokeApiTypeRepository {
 	private readonly pokemonEndpoint = "https://pokeapi.co/api/v2/type/$id";
 	private readonly language = "es";
 
-	public searchById = async (id: number): Promise<PokemonType> => {
+	public searchById = async (id: number): Promise<PokemonTypeWithRelations> => {
 		const url = this.pokemonEndpoint.replace("$id", id.toString());
 
 		const pokeApiType = await appFetch<PokeApiPokemonType>(url);
@@ -17,13 +17,15 @@ export class PokeApiTypeRepository {
 		return await this.pokeApiToApp(pokeApiType);
 	};
 
-	public searchByUrl = async (url: string): Promise<PokemonType> => {
+	public searchByUrl = async (url: string): Promise<PokemonTypeWithRelations> => {
 		const pokeApiPokemon = await appFetch<PokeApiPokemonType>(url);
 
 		return await this.pokeApiToApp(pokeApiPokemon);
 	};
 
-	private readonly pokeApiToApp = async (pokeApiType: PokeApiPokemonType): Promise<PokemonType> => {
+	private readonly pokeApiToApp = async (
+		pokeApiType: PokeApiPokemonType
+	): Promise<PokemonTypeWithRelations> => {
 		const { names, damage_relations } = pokeApiType;
 
 		const translatedName = await translateName(names, this.language);
@@ -35,8 +37,10 @@ export class PokeApiTypeRepository {
 				halfDamageTo: await this.translateTypes(damage_relations.half_damage_to),
 				doubleDamageTo: await this.translateTypes(damage_relations.double_damage_to),
 				noDamageFrom: await this.translateTypes(damage_relations.no_damage_from),
+				quarterDamageFrom: [],
 				halfDamageFrom: await this.translateTypes(damage_relations.half_damage_from),
 				doubleDamageFrom: await this.translateTypes(damage_relations.double_damage_from),
+				quadDamageFrom: [],
 			},
 		};
 	};

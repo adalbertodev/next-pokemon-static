@@ -26,11 +26,17 @@ export interface TypeRelations {
 	halfDamageTo: Type[];
 	doubleDamageTo: Type[];
 	noDamageFrom: Type[];
+	quarterDamageFrom?: Type[];
 	halfDamageFrom: Type[];
 	doubleDamageFrom: Type[];
+	quadDamageFrom?: Type[];
+}
+
+export interface PokemonTypeWithRelations {
+	name: Type;
+	damageRelations: TypeRelations;
 }
 
 export interface PokemonType {
 	name: Type;
-	damageRelations: TypeRelations;
 }

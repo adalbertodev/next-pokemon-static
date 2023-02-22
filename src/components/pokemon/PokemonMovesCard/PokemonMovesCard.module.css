@@ -1,0 +1,33 @@
+.damage_class__box {
+	display: flex;
+	justify-content: center;
+}
+
+.method {
+	width: 5%;
+}
+
+.move {
+	color: var(--nextui-colors-primary);
+	font-weight: 500;
+}
+
+.type {
+	width: 10%;
+}
+
+.damage_class {
+	width: 10%;
+}
+
+.power {
+	width: 5%;
+}
+
+.accuracy {
+	width: 10%;
+}
+
+.pp {
+	width: 5%;
+}

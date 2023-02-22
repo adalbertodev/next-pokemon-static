@@ -1,9 +1,14 @@
 import { PokemonMove } from "./PokemonMove";
-import { PokemonType } from "./PokemonType";
+import { PokemonType, TypeRelations } from "./PokemonType";
 
 export interface PokemonAbility {
 	name: string;
 	isHidden: boolean;
+}
+
+export interface PokemonTypeAndRelations {
+	types: PokemonType[];
+	relations: TypeRelations;
 }
 
 export interface PokemonStat {
@@ -30,8 +35,8 @@ export interface Pokemon {
 	weight: number;
 	height: number;
 
-	types: PokemonType[];
 	abilities: PokemonAbility[];
+	type: PokemonTypeAndRelations;
 
 	moves: PokemonMove[];
 	stats: PokemonStat[];

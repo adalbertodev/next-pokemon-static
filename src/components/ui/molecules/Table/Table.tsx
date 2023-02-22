@@ -5,6 +5,7 @@ import styles from "./Table.module.css";
 interface Column {
 	key: string;
 	label: string;
+	className?: string;
 }
 
 interface Row {
@@ -14,9 +15,10 @@ interface Row {
 interface Props {
 	columns: Column[];
 	rows: Row[];
+	align?: "left" | "center" | "right";
 }
 
-export const Table: FC<Props> = ({ columns, rows }) => {
+export const Table: FC<Props> = ({ columns, rows, align = "left" }) => {
 	return (
 		<div className={styles.table_container}>
 			<table className={styles.table} role="grid">
@@ -24,7 +26,7 @@ export const Table: FC<Props> = ({ columns, rows }) => {
 					<tr className={styles.table_head__row} role="row">
 						{columns.map((column) => (
 							<th
-								className={styles.table_head__cell}
+								className={`${styles.table_head__cell} ${styles[`table_head__cell--${align}ed`]}`}
 								key={column.key}
 								tabIndex={-1}
 								role="columnHeader"
@@ -40,7 +42,9 @@ export const Table: FC<Props> = ({ columns, rows }) => {
 						<tr className={styles.table_body__row} key={`row-${rowIndex}`} tabIndex={-1} role="row">
 							{columns.map((column, cellIndex) => (
 								<td
-									className={styles.table_body__cell}
+									className={`${styles.table_body__cell} ${styles[`table_body__cell--${align}ed`]}${
+										column.className ? ` ${column.className}` : ""
+									}`}
 									key={`row-${rowIndex}_cell-${cellIndex}`}
 									tabIndex={-1}
 									role="rowheader"

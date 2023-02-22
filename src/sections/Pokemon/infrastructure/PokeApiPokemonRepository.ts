@@ -7,7 +7,9 @@ import {
 	PokemonMove,
 	PokemonRepository,
 	PokemonStat,
-	PokemonType,
+	PokemonTypeAndRelations,
+	Type,
+	TypeRelations,
 } from "../domain";
 import { PokeApiAbility, PokeApiMove, PokeApiPokemon, PokeApiStat, PokeApiType } from "./PokeApi";
 import { PokeApiMoveRepository } from "./PokeApiMoveRepository";
@@ -43,8 +45,8 @@ export class PokeApiPokemonRepository implements PokemonRepository {
 			weight: weight / 10, // api return in hectometers
 			height: height / 10, // api return in decimeters
 
-			types: await this.convertToAppTypes(types),
 			abilities: await this.convertToAppAbilities(abilities),
+			type: await this.convertToAppTypes(types),
 
 			moves: await this.getAppMoves(moves),
 			stats: await this.convertToAppStats(stats),
@@ -75,10 +77,81 @@ export class PokeApiPokemonRepository implements PokemonRepository {
 		return await Promise.all(pokemonAbilities);
 	};
 
-	private readonly convertToAppTypes = async (types: PokeApiType[]): Promise<PokemonType[]> => {
-		const typeRepository = new PokeApiTypeRepository();
+	private readonly convertToAppTypes = async (
+		types: PokeApiType[]
+	): Promise<PokemonTypeAndRelations> => {
+		interface TypeMultiplier {
+			name: Type;
+			value: number;
+		}
 
-		return Promise.all(types.map(async ({ type }) => typeRepository.searchByUrl(type.url)));
+		interface DamageRelations {
+			damageReceived: TypeMultiplier[];
+			damageDone: TypeMultiplier[];
+		}
+
+		const typeRepository = new PokeApiTypeRepository();
+		const pokemonTypes = await Promise.all(
+			types.map(async ({ type }) => typeRepository.searchByUrl(type.url))
+		);
+
+		const convertToTypeRelations = (types: TypeMultiplier[], multiplier: number) => {
+			return types.filter((type) => type.value === multiplier).map((type) => type.name);
+		};
+
+		const damageRelations: DamageRelations = pokemonTypes
+			.map(({ damageRelations }) => ({
+				damageReceived: [
+					...damageRelations.noDamageFrom.map((type) => ({ name: type, value: 0 })),
+					...damageRelations.halfDamageFrom.map((type) => ({ name: type, value: 0.5 })),
+					...damageRelations.doubleDamageFrom.map((type) => ({ name: type, value: 2 })),
+				],
+				damageDone: [
+					...damageRelations.noDamageTo.map((type) => ({ name: type, value: 0 })),
+					...damageRelations.halfDamageTo.map((type) => ({ name: type, value: 0.5 })),
+					...damageRelations.doubleDamageTo.map((type) => ({ name: type, value: 2 })),
+				],
+			}))
+			.reduce((result, current) => ({
+				damageReceived: [...result.damageReceived, ...current.damageReceived],
+				damageDone: [...result.damageDone, ...current.damageDone],
+			}));
+
+		damageRelations.damageReceived = damageRelations.damageReceived
+			.map((type, index, types) => {
+				const duplicatedTypeValue = types
+					.slice(index + 1)
+					.find((type2) => type2.name === type.name)?.value;
+
+				return {
+					...type,
+					value: duplicatedTypeValue ? type.value * duplicatedTypeValue : type.value,
+				};
+			})
+			.filter(
+				(type, index, types) => index === types.findIndex((type2) => type2.name === type.name)
+			);
+
+		damageRelations.damageDone = damageRelations.damageDone.filter(
+			(type, index, types) =>
+				index === types.findIndex((type2) => JSON.stringify(type2) === JSON.stringify(type))
+		);
+
+		const pokemonRelations: TypeRelations = {
+			noDamageFrom: convertToTypeRelations(damageRelations.damageReceived, 0),
+			quarterDamageFrom: convertToTypeRelations(damageRelations.damageReceived, 0.25),
+			halfDamageFrom: convertToTypeRelations(damageRelations.damageReceived, 0.5),
+			doubleDamageFrom: convertToTypeRelations(damageRelations.damageReceived, 2),
+			quadDamageFrom: convertToTypeRelations(damageRelations.damageReceived, 4),
+			noDamageTo: convertToTypeRelations(damageRelations.damageDone, 0),
+			halfDamageTo: convertToTypeRelations(damageRelations.damageDone, 0.5),
+			doubleDamageTo: convertToTypeRelations(damageRelations.damageDone, 2),
+		};
+
+		return {
+			types: pokemonTypes.map((type) => ({ name: type.name })),
+			relations: pokemonRelations,
+		};
 	};
 
 	private readonly getAppMoves = async (moves: PokeApiMove[]): Promise<PokemonMove[]> => {
