@@ -45,6 +45,7 @@ export const Table: FC<Props> = ({ columns, rows, align = "left" }) => {
 									className={`${styles.table_body__cell} ${styles[`table_body__cell--${align}ed`]}${
 										column.className ? ` ${column.className}` : ""
 									}`}
+									style={{ height: `calc(100% / ${rows.length})` }}
 									key={`row-${rowIndex}_cell-${cellIndex}`}
 									tabIndex={-1}
 									role="rowheader"

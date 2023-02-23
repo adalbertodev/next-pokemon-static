@@ -1,0 +1,18 @@
+.header_cell__damage {
+	width: 20%;
+	min-width: 106px;
+	vertical-align: middle;
+}
+
+.row_cell__damage {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.row_cell__types {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	height: 100%;
+}

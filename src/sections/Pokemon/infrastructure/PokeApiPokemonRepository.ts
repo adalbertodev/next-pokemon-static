@@ -96,7 +96,10 @@ export class PokeApiPokemonRepository implements PokemonRepository {
 		);
 
 		const convertToTypeRelations = (types: TypeMultiplier[], multiplier: number) => {
-			return types.filter((type) => type.value === multiplier).map((type) => type.name);
+			return types
+				.filter((type) => type.value === multiplier)
+				.map((type) => type.name)
+				.sort();
 		};
 
 		const damageRelations: DamageRelations = pokemonTypes

@@ -28,7 +28,7 @@ export const PokemonDataCard: FC<Props> = ({ pokemon }) => {
 			},
 			{
 				label: "Tipo",
-				value: <TypeList types={pokemon.type.types.map((type) => type.name)} />,
+				value: <TypeList variant="linked" types={pokemon.type.types.map((type) => type.name)} />,
 			},
 			{
 				label: "Habilidad",

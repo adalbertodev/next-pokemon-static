@@ -1,3 +1,7 @@
+.card div[role="section"] {
+	filter: none;
+}
+
 .card_body {
 	padding: var(--nextui-space-sm) var(--nextui-space-lg);
 }

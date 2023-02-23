@@ -26,7 +26,7 @@ export const Card: FC<CardProps> = ({
 	);
 
 	return (
-		<NextUICard className={className}>
+		<NextUICard className={`${styles.card} ${className ? className : ""}`}>
 			<NextUICard.Header className={titleClass}>{renderTitle}</NextUICard.Header>
 
 			<NextUICard.Body

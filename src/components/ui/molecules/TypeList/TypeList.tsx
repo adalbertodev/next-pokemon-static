@@ -7,13 +7,18 @@ import styles from "./TypeList.module.css";
 
 interface Props {
 	types: PokemonType[];
+
+	variant?: "default" | "linked";
 }
 
-export const TypeList: FC<Props> = ({ types }) => {
+export const TypeList: FC<Props> = ({ types, variant = "default" }) => {
 	return (
 		<ul className={styles.type_list}>
 			{types.map((type) => (
-				<li key={type} className={styles.type_container}>
+				<li
+					key={type}
+					className={`${styles.type_container} ${variant === "linked" ? styles.linked : ""}`}
+				>
 					<Type type={type} />
 				</li>
 			))}
