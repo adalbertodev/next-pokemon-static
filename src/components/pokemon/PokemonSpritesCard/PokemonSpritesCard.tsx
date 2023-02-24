@@ -26,7 +26,6 @@ export const PokemonSpritesCard: FC<Props> = ({ name, sprites }) => {
 	const pokemonSprites = useMemo(
 		() =>
 			Object.entries(orderedSprites)
-				.filter((sprite: [string, string | null]) => sprite[0] !== "default")
 				.filter((sprite: [string, string | null]): sprite is [string, string] => sprite[1] !== null)
 				.map((sprite: [string, string]) => ({
 					label: sprite[0],
@@ -36,17 +35,14 @@ export const PokemonSpritesCard: FC<Props> = ({ name, sprites }) => {
 	);
 
 	return (
-		<Card
-			title="Sprites"
-			description={
-				<Grid.Container gap={0}>
-					{pokemonSprites.map((sprite) => (
-						<Grid xs={6} sm={3} key={`${name}-spriteimage-${sprite.label}`}>
-							<Image src={sprite.img} alt={name} width="100" height="100" />
-						</Grid>
-					))}
-				</Grid.Container>
-			}
-		/>
+		<Card header="Sprites">
+			<Grid.Container gap={0}>
+				{pokemonSprites.map((sprite) => (
+					<Grid xs={6} sm={3} key={`${name}-spriteimage-${sprite.label}`}>
+						<Image src={sprite.img} alt={name} width="100" height="100" />
+					</Grid>
+				))}
+			</Grid.Container>
+		</Card>
 	);
 };

@@ -33,25 +33,22 @@ export const PokemonTypesTableCard: FC<Props> = ({ title, damageLabel, multiplie
 	});
 
 	return (
-		<Card
-			title={title}
-			description={
-				<Table
-					align="center"
-					columns={[
-						{ key: "damage", label: damageLabel ?? "Daño", className: styles.header_cell__damage },
-						{ key: "types", label: "Tipos" },
-					]}
-					rows={multipliersRows.map((row) => ({
-						damage: <div className={styles.row_cell__damage}>{row.label}</div>,
-						types: (
-							<div className={styles.row_cell__types}>
-								{row.types ? <TypeList types={row.types} /> : "Ninguno"}
-							</div>
-						),
-					}))}
-				/>
-			}
-		/>
+		<Card header={title}>
+			<Table
+				align="center"
+				columns={[
+					{ key: "damage", label: damageLabel ?? "Daño", className: styles.header_cell__damage },
+					{ key: "types", label: "Tipos" },
+				]}
+				rows={multipliersRows.map((row) => ({
+					damage: <div className={styles.row_cell__damage}>{row.label}</div>,
+					types: (
+						<div className={styles.row_cell__types}>
+							{row.types ? <TypeList types={row.types} /> : "Ninguno"}
+						</div>
+					),
+				}))}
+			/>
+		</Card>
 	);
 };

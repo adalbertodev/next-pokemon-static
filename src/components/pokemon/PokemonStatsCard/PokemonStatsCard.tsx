@@ -29,33 +29,27 @@ export const PokemonStatsCard: FC<Props> = ({ stats }) => {
 	}, []);
 
 	return (
-		<Card
-			description={
-				<table className={styles.table}>
-					<tbody>
-						{restructuredStatsName.map((stat) => (
-							<tr key={stat.label}>
-								<th className={styles.table_row__head_cell}>{stat.label}:</th>
+		<Card>
+			<table className={styles.table}>
+				<tbody>
+					{restructuredStatsName.map((stat) => (
+						<tr key={stat.label}>
+							<th className={styles.table_row__head_cell}>{stat.label}:</th>
 
-								<td className={styles.table_row__cell}>{stat.value}</td>
+							<td className={styles.table_row__cell}>{stat.value}</td>
 
-								<td className={styles.table_row__cell}>
-									<div
-										className={`${styles.bar_stat} ${
-											styles[`greater_than_${barColorValue(stat.value)}`]
-										}`}
-										style={
-											{
-												"--bar-width": stat.value,
-											} as CSSProperties
-										}
-									></div>
-								</td>
-							</tr>
-						))}
-					</tbody>
-				</table>
-			}
-		/>
+							<td className={styles.table_row__cell}>
+								<div
+									className={`${styles.bar_stat} ${
+										styles[`greater_than_${barColorValue(stat.value)}`]
+									}`}
+									style={{ "--bar-width": stat.value } as CSSProperties}
+								></div>
+							</td>
+						</tr>
+					))}
+				</tbody>
+			</table>
+		</Card>
 	);
 };

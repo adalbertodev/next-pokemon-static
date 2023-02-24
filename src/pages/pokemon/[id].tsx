@@ -3,8 +3,10 @@ import { ParsedUrlQuery } from "querystring";
 
 import { PokemonInfo } from "@/components/pokemon";
 import { Layout } from "@/components/ui/templates";
-import { PokeApiPokemonRepository, Pokemon } from "@/sections/Pokemon";
+import { PokeApiPokemonRepository, Pokemon, PokemonRepository } from "@/sections/Pokemon";
 import { capitalize } from "@/utils";
+
+const pokemonRepository: PokemonRepository = new PokeApiPokemonRepository();
 
 interface Props {
 	pokemon: Pokemon;
@@ -46,8 +48,7 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
 	}
 
 	const { id } = params;
-
-	const pokemon = await new PokeApiPokemonRepository().searchById(Number(id));
+	const pokemon = await pokemonRepository.searchById(Number(id));
 
 	return {
 		props: { pokemon },

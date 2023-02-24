@@ -1,7 +1,13 @@
 /* eslint-disable camelcase */
 import { appFetch } from "@/utils";
 
-import { PokemonTypeWithRelations, Type } from "../domain";
+import {
+	PokemonTypeAndRelations,
+	PokemonTypeRelations,
+	Type,
+	TypeRelation,
+	TypeRelations,
+} from "../domain";
 import { PokeApiNamedResource, PokeApiPokemonType } from "./PokeApi";
 import { isType, translateName } from "./utils";
 
@@ -9,57 +15,110 @@ export class PokeApiTypeRepository {
 	private readonly pokemonEndpoint = "https://pokeapi.co/api/v2/type/$id";
 	private readonly language = "es";
 
-	public searchById = async (id: number): Promise<PokemonTypeWithRelations> => {
+	public searchPokemonTypeByIds = async (ids: number[]): Promise<PokemonTypeAndRelations> => {
+		const urls = ids.map((id) => this.pokemonEndpoint.replace("$id", id.toString()));
+
+		const pokeApiTypes = await Promise.all(
+			urls.map(async (url) => await appFetch<PokeApiPokemonType>(url))
+		);
+
+		return await this.toApp(pokeApiTypes);
+	};
+
+	public searchPokemonTypeByUrls = async (urls: string[]): Promise<PokemonTypeAndRelations> => {
+		const pokeApiTypes = await Promise.all(
+			urls.map(async (url) => await appFetch<PokeApiPokemonType>(url))
+		);
+
+		return await this.toApp(pokeApiTypes);
+	};
+
+	public searchTypeRelationsById = async (id: string): Promise<PokemonTypeRelations> => {
 		const url = this.pokemonEndpoint.replace("$id", id.toString());
 
-		const pokeApiType = await appFetch<PokeApiPokemonType>(url);
-
-		return await this.pokeApiToApp(pokeApiType);
-	};
-
-	public searchByUrl = async (url: string): Promise<PokemonTypeWithRelations> => {
 		const pokeApiPokemon = await appFetch<PokeApiPokemonType>(url);
 
-		return await this.pokeApiToApp(pokeApiPokemon);
+		return await this.toPokemonTypeRelations(pokeApiPokemon);
 	};
 
-	private readonly pokeApiToApp = async (
+	public searchTypeRelationsByUrl = async (url: string): Promise<PokemonTypeRelations> => {
+		const pokeApiPokemon = await appFetch<PokeApiPokemonType>(url);
+
+		return await this.toPokemonTypeRelations(pokeApiPokemon);
+	};
+
+	private readonly toApp = async (
+		pokeApiTypes: PokeApiPokemonType[]
+	): Promise<PokemonTypeAndRelations> => {
+		const pokemonTypes = await Promise.all(
+			pokeApiTypes.map(async (pokeApiType) => this.toPokemonTypeRelations(pokeApiType))
+		);
+
+		const damageRelations: TypeRelations = pokemonTypes
+			.map(({ damageRelations }) => ({
+				asDefender: damageRelations.asDefender,
+				asAttacker: damageRelations.asDefender,
+			}))
+			.reduce((result, current) => ({
+				asDefender: [...result.asDefender, ...current.asDefender],
+				asAttacker: [...result.asAttacker, ...current.asAttacker],
+			}));
+
+		damageRelations.asDefender = damageRelations.asDefender
+			.map((type, index, types) => {
+				const duplicatedTypeValue = types
+					.slice(index + 1)
+					.find((type2) => type2.name === type.name)?.multiplier;
+
+				return {
+					...type,
+					multiplier: duplicatedTypeValue ? type.multiplier * duplicatedTypeValue : type.multiplier,
+				};
+			})
+			.filter(
+				(type, index, types) => index === types.findIndex((type2) => type2.name === type.name)
+			);
+
+		damageRelations.asAttacker = damageRelations.asAttacker.filter(
+			(type, index, types) =>
+				index === types.findIndex((type2) => JSON.stringify(type2) === JSON.stringify(type))
+		);
+
+		return {
+			types: pokemonTypes.map((type) => ({ name: type.name })),
+			relations: {
+				asDefender: damageRelations.asDefender,
+				asAttacker: damageRelations.asAttacker,
+			},
+		};
+	};
+
+	private readonly toPokemonTypeRelations = async (
 		pokeApiType: PokeApiPokemonType
-	): Promise<PokemonTypeWithRelations> => {
+	): Promise<PokemonTypeRelations> => {
 		const { names, damage_relations } = pokeApiType;
 
 		const translatedName = await translateName(names, this.language);
+
+		const toTypeRelation = (types: Type[], multiplier: number): TypeRelation[] => {
+			return types.map((type) => ({
+				name: type,
+				multiplier,
+			}));
+		};
 
 		return {
 			name: translatedName && isType(translatedName) ? translatedName : "Normal",
 			damageRelations: {
 				asDefender: [
-					...(await this.translateTypes(damage_relations.no_damage_from)).map((type) => ({
-						name: type,
-						multiplier: 0,
-					})),
-					...(await this.translateTypes(damage_relations.half_damage_from)).map((type) => ({
-						name: type,
-						multiplier: 0.5,
-					})),
-					...(await this.translateTypes(damage_relations.double_damage_from)).map((type) => ({
-						name: type,
-						multiplier: 2,
-					})),
+					...toTypeRelation(await this.translateTypes(damage_relations.no_damage_from), 0),
+					...toTypeRelation(await this.translateTypes(damage_relations.half_damage_from), 0.5),
+					...toTypeRelation(await this.translateTypes(damage_relations.double_damage_from), 2),
 				],
 				asAttacker: [
-					...(await this.translateTypes(damage_relations.no_damage_to)).map((type) => ({
-						name: type,
-						multiplier: 0,
-					})),
-					...(await this.translateTypes(damage_relations.half_damage_to)).map((type) => ({
-						name: type,
-						multiplier: 0.5,
-					})),
-					...(await this.translateTypes(damage_relations.double_damage_to)).map((type) => ({
-						name: type,
-						multiplier: 2,
-					})),
+					...toTypeRelation(await this.translateTypes(damage_relations.no_damage_to), 0),
+					...toTypeRelation(await this.translateTypes(damage_relations.half_damage_to), 0.5),
+					...toTypeRelation(await this.translateTypes(damage_relations.double_damage_to), 2),
 				],
 			},
 		};

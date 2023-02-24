@@ -13,6 +13,6 @@ export const DamageClass: FC<Props> = ({ damageClass }) => {
 		<div
 			title={`Clase ${damageClass}`}
 			className={`${styles.damage_class} ${styles[damageClass]}`}
-		></div>
+		/>
 	);
 };

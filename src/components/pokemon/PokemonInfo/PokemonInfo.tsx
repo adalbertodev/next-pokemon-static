@@ -32,27 +32,25 @@ export const PokemonInfo: FC<Props> = ({ pokemon }) => {
 
 			<Grid xs={12} md={9}>
 				<Card
-					titleClass={styles.main_card__title}
-					descriptionClass={styles.main_card__description}
-					title={
+					headerClassName={styles.main_card__title}
+					header={
 						<>
 							<h1>{pokemon.name}</h1>
 
 							<SaveFavButton>Guardar en Favoritos</SaveFavButton>
 						</>
 					}
-					description={
-						<Grid.Container gap={2}>
-							<Grid xs={6} sm={7} md={7} lg={6}>
-								<PokemonDataCard pokemon={pokemon} />
-							</Grid>
+				>
+					<Grid.Container gap={2}>
+						<Grid xs={6} sm={7} md={7} lg={6}>
+							<PokemonDataCard pokemon={pokemon} />
+						</Grid>
 
-							<Grid xs={6} sm={5} md={5} lg={6}>
-								<PokemonStatsCard stats={pokemon.stats} />
-							</Grid>
-						</Grid.Container>
-					}
-				/>
+						<Grid xs={6} sm={5} md={5} lg={6}>
+							<PokemonStatsCard stats={pokemon.stats} />
+						</Grid>
+					</Grid.Container>
+				</Card>
 			</Grid>
 
 			<Grid xs={12} sm={6}>
@@ -64,30 +62,27 @@ export const PokemonInfo: FC<Props> = ({ pokemon }) => {
 			</Grid>
 
 			<Grid xs={12}>
-				<Card
-					title="Debilidades y Fortalezas"
-					description={
-						<Grid.Container gap={2}>
-							<Grid xs={12} md={6}>
-								<PokemonTypesTableCard
-									title="Defensor"
-									damageLabel="Daño recibido"
-									multipliers={[4, 2, 0.5, 0.25, 0]}
-									types={pokemon.type.relations.asDefender}
-								/>
-							</Grid>
+				<Card header="Debilidades y Fortalezas">
+					<Grid.Container gap={2}>
+						<Grid xs={12} md={6}>
+							<PokemonTypesTableCard
+								title="Defensor"
+								damageLabel="Daño recibido"
+								multipliers={[4, 2, 0.5, 0.25, 0]}
+								types={pokemon.type.relations.asDefender}
+							/>
+						</Grid>
 
-							<Grid xs={12} md={6}>
-								<PokemonTypesTableCard
-									title="Atacante"
-									damageLabel="Daño hecho"
-									multipliers={[2, 0.5, 0]}
-									types={pokemon.type.relations.asAttacker}
-								/>
-							</Grid>
-						</Grid.Container>
-					}
-				/>
+						<Grid xs={12} md={6}>
+							<PokemonTypesTableCard
+								title="Atacante"
+								damageLabel="Daño hecho"
+								multipliers={[2, 0.5, 0]}
+								types={pokemon.type.relations.asAttacker}
+							/>
+						</Grid>
+					</Grid.Container>
+				</Card>
 			</Grid>
 
 			<Grid xs={12}>
