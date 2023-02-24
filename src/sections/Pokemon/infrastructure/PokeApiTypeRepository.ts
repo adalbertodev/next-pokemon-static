@@ -33,14 +33,34 @@ export class PokeApiTypeRepository {
 		return {
 			name: translatedName && isType(translatedName) ? translatedName : "Normal",
 			damageRelations: {
-				noDamageTo: await this.translateTypes(damage_relations.no_damage_to),
-				halfDamageTo: await this.translateTypes(damage_relations.half_damage_to),
-				doubleDamageTo: await this.translateTypes(damage_relations.double_damage_to),
-				noDamageFrom: await this.translateTypes(damage_relations.no_damage_from),
-				quarterDamageFrom: [],
-				halfDamageFrom: await this.translateTypes(damage_relations.half_damage_from),
-				doubleDamageFrom: await this.translateTypes(damage_relations.double_damage_from),
-				quadDamageFrom: [],
+				asDefender: [
+					...(await this.translateTypes(damage_relations.no_damage_from)).map((type) => ({
+						name: type,
+						multiplier: 0,
+					})),
+					...(await this.translateTypes(damage_relations.half_damage_from)).map((type) => ({
+						name: type,
+						multiplier: 0.5,
+					})),
+					...(await this.translateTypes(damage_relations.double_damage_from)).map((type) => ({
+						name: type,
+						multiplier: 2,
+					})),
+				],
+				asAttacker: [
+					...(await this.translateTypes(damage_relations.no_damage_to)).map((type) => ({
+						name: type,
+						multiplier: 0,
+					})),
+					...(await this.translateTypes(damage_relations.half_damage_to)).map((type) => ({
+						name: type,
+						multiplier: 0.5,
+					})),
+					...(await this.translateTypes(damage_relations.double_damage_to)).map((type) => ({
+						name: type,
+						multiplier: 2,
+					})),
+				],
 			},
 		};
 	};

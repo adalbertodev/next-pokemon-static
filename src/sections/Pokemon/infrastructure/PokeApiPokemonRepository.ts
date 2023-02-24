@@ -8,7 +8,6 @@ import {
 	PokemonRepository,
 	PokemonStat,
 	PokemonTypeAndRelations,
-	Type,
 	TypeRelations,
 } from "../domain";
 import { PokeApiAbility, PokeApiMove, PokeApiPokemon, PokeApiStat, PokeApiType } from "./PokeApi";
@@ -80,80 +79,47 @@ export class PokeApiPokemonRepository implements PokemonRepository {
 	private readonly convertToAppTypes = async (
 		types: PokeApiType[]
 	): Promise<PokemonTypeAndRelations> => {
-		interface TypeMultiplier {
-			name: Type;
-			value: number;
-		}
-
-		interface DamageRelations {
-			damageReceived: TypeMultiplier[];
-			damageDone: TypeMultiplier[];
-		}
-
 		const typeRepository = new PokeApiTypeRepository();
 		const pokemonTypes = await Promise.all(
 			types.map(async ({ type }) => typeRepository.searchByUrl(type.url))
 		);
 
-		const convertToTypeRelations = (types: TypeMultiplier[], multiplier: number) => {
-			return types
-				.filter((type) => type.value === multiplier)
-				.map((type) => type.name)
-				.sort();
-		};
-
-		const damageRelations: DamageRelations = pokemonTypes
+		const damageRelations: TypeRelations = pokemonTypes
 			.map(({ damageRelations }) => ({
-				damageReceived: [
-					...damageRelations.noDamageFrom.map((type) => ({ name: type, value: 0 })),
-					...damageRelations.halfDamageFrom.map((type) => ({ name: type, value: 0.5 })),
-					...damageRelations.doubleDamageFrom.map((type) => ({ name: type, value: 2 })),
-				],
-				damageDone: [
-					...damageRelations.noDamageTo.map((type) => ({ name: type, value: 0 })),
-					...damageRelations.halfDamageTo.map((type) => ({ name: type, value: 0.5 })),
-					...damageRelations.doubleDamageTo.map((type) => ({ name: type, value: 2 })),
-				],
+				asDefender: damageRelations.asDefender,
+				asAttacker: damageRelations.asDefender,
 			}))
 			.reduce((result, current) => ({
-				damageReceived: [...result.damageReceived, ...current.damageReceived],
-				damageDone: [...result.damageDone, ...current.damageDone],
+				asDefender: [...result.asDefender, ...current.asDefender],
+				asAttacker: [...result.asAttacker, ...current.asAttacker],
 			}));
 
-		damageRelations.damageReceived = damageRelations.damageReceived
+		damageRelations.asDefender = damageRelations.asDefender
 			.map((type, index, types) => {
 				const duplicatedTypeValue = types
 					.slice(index + 1)
-					.find((type2) => type2.name === type.name)?.value;
+					.find((type2) => type2.name === type.name)?.multiplier;
 
 				return {
 					...type,
-					value: duplicatedTypeValue ? type.value * duplicatedTypeValue : type.value,
+					multiplier: duplicatedTypeValue ? type.multiplier * duplicatedTypeValue : type.multiplier,
 				};
 			})
 			.filter(
 				(type, index, types) => index === types.findIndex((type2) => type2.name === type.name)
 			);
 
-		damageRelations.damageDone = damageRelations.damageDone.filter(
+		damageRelations.asAttacker = damageRelations.asAttacker.filter(
 			(type, index, types) =>
 				index === types.findIndex((type2) => JSON.stringify(type2) === JSON.stringify(type))
 		);
 
-		const pokemonRelations: TypeRelations = {
-			noDamageFrom: convertToTypeRelations(damageRelations.damageReceived, 0),
-			quarterDamageFrom: convertToTypeRelations(damageRelations.damageReceived, 0.25),
-			halfDamageFrom: convertToTypeRelations(damageRelations.damageReceived, 0.5),
-			doubleDamageFrom: convertToTypeRelations(damageRelations.damageReceived, 2),
-			quadDamageFrom: convertToTypeRelations(damageRelations.damageReceived, 4),
-			noDamageTo: convertToTypeRelations(damageRelations.damageDone, 0),
-			halfDamageTo: convertToTypeRelations(damageRelations.damageDone, 0.5),
-			doubleDamageTo: convertToTypeRelations(damageRelations.damageDone, 2),
-		};
-
 		return {
 			types: pokemonTypes.map((type) => ({ name: type.name })),
-			relations: pokemonRelations,
+			relations: {
+				asDefender: damageRelations.asDefender,
+				asAttacker: damageRelations.asAttacker,
+			},
 		};
 	};
 

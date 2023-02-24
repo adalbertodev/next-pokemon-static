@@ -72,45 +72,8 @@ export const PokemonInfo: FC<Props> = ({ pokemon }) => {
 								<PokemonTypesTableCard
 									title="Defensor"
 									damageLabel="Daño recibido"
-									rows={[
-										{
-											damage: "x4",
-											types:
-												pokemon.type.relations.quadDamageFrom &&
-												pokemon.type.relations.quadDamageFrom.length > 0
-													? pokemon.type.relations.quadDamageFrom
-													: undefined,
-										},
-										{
-											damage: "x2",
-											types:
-												pokemon.type.relations.doubleDamageFrom.length > 0
-													? pokemon.type.relations.doubleDamageFrom
-													: undefined,
-										},
-										{
-											damage: "1/2",
-											types:
-												pokemon.type.relations.halfDamageFrom.length > 0
-													? pokemon.type.relations.halfDamageFrom
-													: undefined,
-										},
-										{
-											damage: "1/4",
-											types:
-												pokemon.type.relations.quarterDamageFrom &&
-												pokemon.type.relations.quarterDamageFrom.length > 0
-													? pokemon.type.relations.quarterDamageFrom
-													: undefined,
-										},
-										{
-											damage: "x0",
-											types:
-												pokemon.type.relations.noDamageFrom.length > 0
-													? pokemon.type.relations.noDamageFrom
-													: undefined,
-										},
-									]}
+									multipliers={[4, 2, 0.5, 0.25, 0]}
+									types={pokemon.type.relations.asDefender}
 								/>
 							</Grid>
 
@@ -118,29 +81,8 @@ export const PokemonInfo: FC<Props> = ({ pokemon }) => {
 								<PokemonTypesTableCard
 									title="Atacante"
 									damageLabel="Daño hecho"
-									rows={[
-										{
-											damage: "x2",
-											types:
-												pokemon.type.relations.doubleDamageTo.length > 0
-													? pokemon.type.relations.doubleDamageTo
-													: undefined,
-										},
-										{
-											damage: "1/2",
-											types:
-												pokemon.type.relations.halfDamageTo.length > 0
-													? pokemon.type.relations.halfDamageTo
-													: undefined,
-										},
-										{
-											damage: "x0",
-											types:
-												pokemon.type.relations.noDamageTo.length > 0
-													? pokemon.type.relations.noDamageTo
-													: undefined,
-										},
-									]}
+									multipliers={[2, 0.5, 0]}
+									types={pokemon.type.relations.asAttacker}
 								/>
 							</Grid>
 						</Grid.Container>
