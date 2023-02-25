@@ -1,7 +1,7 @@
 import { Grid } from "@nextui-org/react";
 import { FC } from "react";
 
-import { SaveFavButton } from "@/components/ui";
+import { FavButton } from "@/components/ui";
 import { Card } from "@/components/ui/molecules/Card";
 import { Pokemon } from "@/sections/Pokemon";
 
@@ -37,7 +37,9 @@ export const PokemonInfo: FC<Props> = ({ pokemon }) => {
 						<>
 							<h1>{pokemon.name}</h1>
 
-							<SaveFavButton>Guardar en Favoritos</SaveFavButton>
+							<FavButton ghost size="md">
+								Guardar en Favoritos
+							</FavButton>
 						</>
 					}
 				>

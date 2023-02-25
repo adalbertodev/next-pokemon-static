@@ -1,9 +1,14 @@
 import { Image, Link } from "@nextui-org/react";
 import NextLink from "next/link";
 
+import { config } from "@/config";
+
+import { FavButton } from "../../atoms";
 import styles from "./Navbar.module.css";
 
 export const Navbar = () => {
+	const pageName = config.pageName;
+
 	return (
 		<div className={styles.container}>
 			<NextLink href="/" legacyBehavior>
@@ -15,15 +20,15 @@ export const Navbar = () => {
 						height={32}
 					/>
 
-					<h2>
-						<span>P</span>okédex
-					</h2>
+					<h2 className={styles.title__text}>{pageName}</h2>
 				</Link>
 			</NextLink>
 
-			<NextLink href="/favorites" legacyBehavior>
-				<Link color="text">Favoritos</Link>
-			</NextLink>
+			<FavButton auto>
+				<NextLink href="/favorites" legacyBehavior>
+					<Link color="text">Favoritos</Link>
+				</NextLink>
+			</FavButton>
 		</div>
 	);
 };

@@ -2,6 +2,7 @@ import { GetStaticProps, GetStaticPropsContext, NextPage } from "next";
 
 import { PokemonCardList } from "@/components/pokemon";
 import { Layout } from "@/components/ui/templates";
+import { config } from "@/config";
 import {
 	PokeApiPokemonListRepository,
 	PokemonListRepository,
@@ -16,7 +17,7 @@ interface Props {
 
 const HomePage: NextPage<Props> = ({ pokemons }) => {
 	return (
-		<Layout title="Pokédex">
+		<Layout title={`${config.pageName}, Pokédex Informativa`}>
 			<PokemonCardList pokemons={pokemons} />
 		</Layout>
 	);

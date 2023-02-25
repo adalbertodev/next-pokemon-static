@@ -3,6 +3,7 @@ import { ParsedUrlQuery } from "querystring";
 
 import { PokemonInfo } from "@/components/pokemon";
 import { Layout } from "@/components/ui/templates";
+import { config } from "@/config";
 import { PokeApiPokemonRepository, Pokemon, PokemonRepository } from "@/sections/Pokemon";
 import { capitalize } from "@/utils";
 
@@ -14,7 +15,7 @@ interface Props {
 
 export const PokemonPage: NextPage<Props> = ({ pokemon }) => {
 	return (
-		<Layout title={`${capitalize(pokemon.name)} | Pokédex`}>
+		<Layout title={`${capitalize(pokemon.name)} | ${config.pageName} Pokédex Informativa`}>
 			<PokemonInfo pokemon={pokemon} />
 		</Layout>
 	);

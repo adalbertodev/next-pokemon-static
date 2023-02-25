@@ -18,11 +18,12 @@
 	gap: var(--nextui-space-2);
 }
 
-.title h2 {
+.title__text {
 	font-size: var(--nextui-fontSizes-3xl);
+	font-weight: var(--nextui-fontWeights-bold);
 	margin: 0;
 }
 
-.title h2 > span {
+.title__text::first-letter {
 	font-size: var(--nextui-fontSizes-4xl);
 }

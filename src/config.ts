@@ -1,4 +1,5 @@
 export const config = {
+	pageName: "Pokekad",
 	pokemonMoves: {
 		methods: [
 			{ key: "level-up", label: "Nv." },
