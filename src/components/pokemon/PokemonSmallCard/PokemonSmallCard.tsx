@@ -18,7 +18,7 @@ export const PokemonSmallCard: FC<Props> = ({ pokemon }) => {
 	}, [pokemon.id, router]);
 
 	return (
-		<Card isHoverable isPressable onClick={onPokemonCardClick} className={styles.card}>
+		<Card isHoverable isPressable onPress={onPokemonCardClick} className={styles.card}>
 			<Card.Body className={styles.card_body}>
 				<Card.Image
 					src={pokemon.img}

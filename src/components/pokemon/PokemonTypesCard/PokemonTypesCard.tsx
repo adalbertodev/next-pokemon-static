@@ -6,7 +6,7 @@ import { TypeList } from "@/components/ui/molecules/TypeList";
 import { TypeRelation } from "@/sections/Pokemon";
 import { decimalToFraction } from "@/utils";
 
-import styles from "./PokemonTypesTableCard.module.css";
+import styles from "./PokemonTypesCard.module.css";
 
 interface Props {
 	title?: string;
@@ -15,7 +15,7 @@ interface Props {
 	types: TypeRelation[];
 }
 
-export const PokemonTypesTableCard: FC<Props> = ({ title, damageLabel, multipliers, types }) => {
+export const PokemonTypesCard: FC<Props> = ({ title, damageLabel, multipliers, types }) => {
 	const multipliersRows = multipliers.map((multiplier) => {
 		const label =
 			multiplier < 1 && multiplier !== 0 ? decimalToFraction(multiplier) : `x${multiplier}`;

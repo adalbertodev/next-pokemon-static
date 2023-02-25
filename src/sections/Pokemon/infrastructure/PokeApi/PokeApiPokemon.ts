@@ -267,7 +267,7 @@ interface OtherPokemonSprites {
 	"official-artwork": OfficialArtwork;
 }
 
-interface PokemonSprites {
+export interface PokeApiPokemonSprites {
 	front_default: string | null;
 	front_shiny: string | null;
 	front_female: string | null;
@@ -301,7 +301,7 @@ export interface PokeApiPokemon {
 	order: number;
 	past_types: PastTypes[];
 	species: PokeApiNamedResource;
-	sprites: PokemonSprites;
+	sprites: PokeApiPokemonSprites;
 	stats: PokeApiStat[];
 	types: PokeApiType[];
 	weight: number;

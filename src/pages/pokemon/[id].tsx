@@ -5,9 +5,15 @@ import { PokemonInfo } from "@/components/pokemon";
 import { Layout } from "@/components/ui/templates";
 import { config } from "@/config";
 import { PokeApiPokemonRepository, Pokemon, PokemonRepository } from "@/sections/Pokemon";
+import {
+	LocalStoragePokemonFavoriteRepository,
+	PokemonFavoriteRepository,
+} from "@/sections/PokemonFavorite";
 import { capitalize } from "@/utils";
 
 const pokemonRepository: PokemonRepository = new PokeApiPokemonRepository();
+const pokemonFavoriteRepository: PokemonFavoriteRepository =
+	new LocalStoragePokemonFavoriteRepository();
 
 interface Props {
 	pokemon: Pokemon;
@@ -16,7 +22,7 @@ interface Props {
 export const PokemonPage: NextPage<Props> = ({ pokemon }) => {
 	return (
 		<Layout title={`${capitalize(pokemon.name)} | ${config.pageName} Pokédex Informativa`}>
-			<PokemonInfo pokemon={pokemon} />
+			<PokemonInfo pokemon={pokemon} pokemonFavoriteRepository={pokemonFavoriteRepository} />
 		</Layout>
 	);
 };
@@ -52,7 +58,9 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
 	const pokemon = await pokemonRepository.searchById(Number(id));
 
 	return {
-		props: { pokemon },
+		props: {
+			pokemon,
+		},
 	};
 };
 

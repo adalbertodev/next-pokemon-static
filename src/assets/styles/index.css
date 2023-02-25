@@ -1,5 +1,6 @@
 /* Settings */
 @import url("./settings/colors.css");
+@import url("./settings/sizes.css");
 
 /* Generic */
 @import url("./generic/reset.css");

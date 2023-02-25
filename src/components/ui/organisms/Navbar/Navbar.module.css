@@ -3,7 +3,7 @@
 	background-color: var(--background-navbar);
 	display: flex;
 	flex-direction: row;
-	height: 70px;
+	height: var(--navbar-height);
 	justify-content: space-between;
 	padding: 0 var(--nextui-space-15);
 	position: relative;
@@ -22,6 +22,11 @@
 	font-size: var(--nextui-fontSizes-3xl);
 	font-weight: var(--nextui-fontWeights-bold);
 	margin: 0;
+	transition: opacity 0.25s ease 0s, box-shadow 0.25s ease 0s;
+}
+
+.title__text:hover {
+	opacity: 0.8;
 }
 
 .title__text::first-letter {

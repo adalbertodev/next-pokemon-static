@@ -1,16 +1,13 @@
-import { Button } from "@nextui-org/react";
+import { Button, ButtonProps as NextUIButtonProps } from "@nextui-org/react";
 import { FC } from "react";
 
 interface Props {
-	auto?: boolean;
 	children: React.ReactNode;
-	ghost?: boolean;
-	size?: "xs" | "sm" | "md" | "lg" | "xl";
 }
 
-export const FavButton: FC<Props> = ({ auto, children, ghost, size }) => {
+export const FavButton: FC<Props & NextUIButtonProps> = ({ children, ...props }) => {
 	return (
-		<Button auto={auto} color="gradient" ghost={ghost} size={size}>
+		<Button color="gradient" {...props}>
 			{children}
 		</Button>
 	);
