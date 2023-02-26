@@ -3,13 +3,8 @@ import { GetStaticProps, GetStaticPropsContext, NextPage } from "next";
 import { PokemonCardList } from "@/components/pokemon";
 import { Layout } from "@/components/ui/templates";
 import { config } from "@/config";
-import {
-	PokeApiPokemonListRepository,
-	PokemonListRepository,
-	SmallPokemon,
-} from "@/sections/PokemonList";
-
-const pokemonListRepository: PokemonListRepository = new PokeApiPokemonListRepository();
+import { repositoriesInitialState } from "@/context/RepositoriesContext";
+import { SmallPokemon } from "@/sections/PokemonList";
 
 interface Props {
 	pokemons: SmallPokemon[];
@@ -24,6 +19,7 @@ const HomePage: NextPage<Props> = ({ pokemons }) => {
 };
 
 export const getStaticProps: GetStaticProps<Props> = async (_: GetStaticPropsContext) => {
+	const { pokemonListRepository } = repositoriesInitialState;
 	const pokemonList = await pokemonListRepository.searchLimitedBy(151);
 
 	return {

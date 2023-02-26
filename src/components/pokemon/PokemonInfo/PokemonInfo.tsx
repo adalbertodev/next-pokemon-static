@@ -4,10 +4,10 @@ import { FC, useCallback, useEffect, useState } from "react";
 
 import { FavButton } from "@/components/ui";
 import { Card } from "@/components/ui/molecules/Card";
+import { useRepositoriesContext } from "@/context/RepositoriesContext";
 import { usePokemonFavorite } from "@/hooks";
 import { Pokemon } from "@/sections/Pokemon";
 
-import { PokemonFavoriteRepository } from "../../../sections/PokemonFavorite/domain/PokemonFavoriteRepository";
 import { PokemonDataCard } from "../PokemonDataCard";
 import { PokemonImageCard } from "../PokemonImageCard";
 import { PokemonMovesCard } from "../PokemonMovesCard";
@@ -18,10 +18,11 @@ import styles from "./PokemonInfo.module.css";
 
 interface Props {
 	pokemon: Pokemon;
-	pokemonFavoriteRepository: PokemonFavoriteRepository;
 }
 
-export const PokemonInfo: FC<Props> = ({ pokemon, pokemonFavoriteRepository }) => {
+export const PokemonInfo: FC<Props> = ({ pokemon }) => {
+	const { pokemonFavoriteRepository } = useRepositoriesContext();
+
 	const { toggleFavorite, existPokemonFavorite } = usePokemonFavorite(pokemonFavoriteRepository);
 	const [isFavorite, setIsFavorite] = useState(false);
 

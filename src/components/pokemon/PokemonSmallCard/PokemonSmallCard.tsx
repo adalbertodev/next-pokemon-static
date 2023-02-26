@@ -14,8 +14,8 @@ export const PokemonSmallCard: FC<Props> = ({ pokemon }) => {
 	const router = useRouter();
 
 	const onPokemonCardClick = useCallback(() => {
-		router.push(`/pokemon/${pokemon.id}`).catch((error) => console.error(error));
-	}, [pokemon.id, router]);
+		router.push(`/pokemon/${pokemon.name}`).catch((error) => console.error(error));
+	}, [pokemon.name, router]);
 
 	return (
 		<Card isHoverable isPressable onPress={onPokemonCardClick} className={styles.card}>
