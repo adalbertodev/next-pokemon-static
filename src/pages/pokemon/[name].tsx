@@ -14,7 +14,10 @@ interface Props {
 
 export const PokemonPage: NextPage<Props> = ({ pokemon }) => {
 	return (
-		<Layout title={`${capitalize(pokemon.name)} | ${config.pageName} Pokédex Informativa`}>
+		<Layout
+			title={`${capitalize(pokemon.name)} | ${config.pageName} Pokédex Informativa`}
+			name={pokemon.name}
+		>
 			<PokemonInfo pokemon={pokemon} />
 		</Layout>
 	);
