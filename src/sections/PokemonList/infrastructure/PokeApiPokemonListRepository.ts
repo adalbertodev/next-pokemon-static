@@ -16,12 +16,12 @@ export class PokeApiPokemonListRepository implements PokemonListRepository {
 		return {
 			pokemons: await Promise.all(
 				pokeApiPokemonList.results.map(async ({ name, url }) => {
-					const { id, sprites } = await appFetch<PokeApiPokemon>(url);
+					const pokeApiPokemon = await appFetch<PokeApiPokemon>(url);
 
 					return {
 						name,
-						id,
-						img: this.getPokemonImage(sprites),
+						id: pokeApiPokemon.id,
+						img: this.getPokemonImage(pokeApiPokemon.sprites),
 					};
 				})
 			),

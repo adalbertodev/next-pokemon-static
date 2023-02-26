@@ -15,18 +15,26 @@ export class PokeApiPokemonRepository implements PokemonRepository {
 	private readonly methods = config.pokemonMoves.methods;
 	private readonly versions = config.pokemonMoves.versions;
 
-	public searchById = async (id: number): Promise<Pokemon> => {
+	public searchById = async (id: number): Promise<Pokemon | null> => {
 		const url = this.pokemonEndpoint.replace("$id", id.toString());
 
-		const pokeApiPokemon = await appFetch<PokeApiPokemon>(url);
+		const pokeApiPokemon = await appFetch<PokeApiPokemon>(url, true);
+
+		if (pokeApiPokemon === null) {
+			return null;
+		}
 
 		return await this.pokeApiToApp(pokeApiPokemon);
 	};
 
-	public searchByName = async (name: string): Promise<Pokemon> => {
+	public searchByName = async (name: string): Promise<Pokemon | null> => {
 		const url = this.pokemonEndpoint.replace("$id", name);
 
-		const pokeApiPokemon = await appFetch<PokeApiPokemon>(url);
+		const pokeApiPokemon = await appFetch<PokeApiPokemon>(url, true);
+
+		if (pokeApiPokemon === null) {
+			return null;
+		}
 
 		return await this.pokeApiToApp(pokeApiPokemon);
 	};

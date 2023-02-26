@@ -57,6 +57,15 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
 		? await pokemonRepository.searchById(Number(name))
 		: await pokemonRepository.searchByName(name);
 
+	if (!pokemon) {
+		return {
+			redirect: {
+				destination: "/",
+				permanent: false,
+			},
+		};
+	}
+
 	if (nameIsNumber) {
 		return {
 			redirect: {
