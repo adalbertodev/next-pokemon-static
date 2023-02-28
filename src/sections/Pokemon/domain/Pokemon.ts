@@ -1,3 +1,4 @@
+import { PokemonEvolution } from "./PokemonEvolution";
 import { PokemonMove } from "./PokemonMove";
 import { PokemonType, TypeRelations } from "./PokemonType";
 
@@ -37,6 +38,7 @@ export interface Pokemon {
 
 	abilities: PokemonAbility[];
 	type: PokemonTypeAndRelations;
+	evolution: PokemonEvolution;
 
 	moves: PokemonMove[];
 	stats: PokemonStat[];

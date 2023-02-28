@@ -1,5 +1,4 @@
 import Head from "next/head";
-import path from "path";
 import { FC } from "react";
 
 import { Navbar } from "../..";
@@ -28,7 +27,10 @@ export const Layout: FC<Props> = ({ children, title, name }) => {
 
 				<meta property="og:title" content={`Información sobre ${metaName}`} />
 				<meta property="og:description" content={`Esta es la página sobre ${metaName}`} />
-				<meta property="og:image" content={path.join(__dirname, "/img/banner.png")} />
+				<meta
+					property="og:image"
+					content={`${process.env.NEXT_PUBLIC_BASE_URL ?? ""}/img/banner.png`}
+				/>
 
 				<link rel="icon" href="/icons/pokekadicon.ico" />
 			</Head>

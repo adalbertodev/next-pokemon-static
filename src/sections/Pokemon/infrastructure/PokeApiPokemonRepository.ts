@@ -2,8 +2,22 @@
 import { config } from "@/config";
 import { appFetch } from "@/utils";
 
-import { Pokemon, PokemonAbility, PokemonMove, PokemonRepository, PokemonStat } from "../domain";
-import { PokeApiAbility, PokeApiMove, PokeApiPokemon, PokeApiStat } from "./PokeApi";
+import {
+	Pokemon,
+	PokemonAbility,
+	PokemonEvolution,
+	PokemonMove,
+	PokemonRepository,
+	PokemonStat,
+} from "../domain";
+import {
+	PokeApiAbility,
+	PokeApiMove,
+	PokeApiPokemon,
+	PokeApiSpecies,
+	PokeApiStat,
+} from "./PokeApi";
+import { PokeApiEvolutionRepository } from "./PokeApiEvolutionRepository";
 import { PokeApiMoveRepository } from "./PokeApiMoveRepository";
 import { PokeApiTypeRepository } from "./PokeApiTypeRepository";
 import { translateName } from "./utils";
@@ -42,7 +56,8 @@ export class PokeApiPokemonRepository implements PokemonRepository {
 	private readonly pokeApiToApp = async (pokeApiPokemon: PokeApiPokemon): Promise<Pokemon> => {
 		const pokeTypeRepository = new PokeApiTypeRepository();
 
-		const { id, name, weight, height, types, sprites, abilities, moves, stats } = pokeApiPokemon;
+		const { id, name, weight, height, types, sprites, abilities, moves, stats, species } =
+			pokeApiPokemon;
 
 		return {
 			id,
@@ -52,6 +67,7 @@ export class PokeApiPokemonRepository implements PokemonRepository {
 
 			abilities: await this.convertToAppAbilities(abilities),
 			type: await pokeTypeRepository.searchPokemonTypeByUrls(types.map(({ type }) => type.url)),
+			evolution: await this.convertToAppEvolution(species.url),
 
 			moves: await this.getAppMoves(moves),
 			stats: await this.convertToAppStats(stats),
@@ -80,6 +96,20 @@ export class PokeApiPokemonRepository implements PokemonRepository {
 		});
 
 		return await Promise.all(pokemonAbilities);
+	};
+
+	private readonly convertToAppEvolution = async (
+		speciesUrl: string
+	): Promise<PokemonEvolution> => {
+		const pokemonEvolutionRepository = new PokeApiEvolutionRepository();
+
+		const pokeApiSpecies = await appFetch<PokeApiSpecies>(speciesUrl);
+
+		const pokemonEvolution = await pokemonEvolutionRepository.searchByUrl(
+			pokeApiSpecies.evolution_chain.url
+		);
+
+		return pokemonEvolution;
 	};
 
 	private readonly getAppMoves = async (moves: PokeApiMove[]): Promise<PokemonMove[]> => {
