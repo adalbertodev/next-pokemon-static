@@ -9,6 +9,7 @@ import { usePokemonFavorite } from "@/hooks";
 import { Pokemon } from "@/sections/Pokemon";
 
 import { PokemonDataCard } from "../PokemonDataCard";
+import { PokemonEvolutionCard } from "../PokemonEvolutionCard";
 import { PokemonImageCard } from "../PokemonImageCard";
 import { PokemonMovesCard } from "../PokemonMovesCard";
 import { PokemonSpritesCard } from "../PokemonSpritesCard";
@@ -75,12 +76,12 @@ export const PokemonInfo: FC<Props> = ({ pokemon }) => {
 				</Card>
 			</Grid>
 
-			<Grid xs={12} sm={6}>
+			<Grid xs={12} md={5}>
 				<PokemonSpritesCard name={pokemon.name} sprites={pokemon.sprites} />
 			</Grid>
 
-			<Grid xs={12} sm={6}>
-				{/* EVOLUCION */}
+			<Grid xs={12} md={7}>
+				<PokemonEvolutionCard evolution={pokemon.evolution} />
 			</Grid>
 
 			<Grid xs={12}>

@@ -4,6 +4,8 @@ import { FC, useMemo } from "react";
 import { Card } from "@/components/ui/molecules/Card";
 import { PokemonSprites } from "@/sections/Pokemon";
 
+import styles from "./PokemonSpritesCard.module.css";
+
 interface Props {
 	name: string;
 	sprites: PokemonSprites;
@@ -35,11 +37,11 @@ export const PokemonSpritesCard: FC<Props> = ({ name, sprites }) => {
 	);
 
 	return (
-		<Card header="Sprites">
-			<Grid.Container gap={0}>
+		<Card header="Sprites" bodyClassName={styles.card_body}>
+			<Grid.Container gap={0} alignItems="center" justify="center">
 				{pokemonSprites.map((sprite) => (
 					<Grid xs={6} sm={3} key={`${name}-spriteimage-${sprite.label}`}>
-						<Image src={sprite.img} alt={name} width="100" height="100" />
+						<Image src={sprite.img} alt={name} width={96} height={96} />
 					</Grid>
 				))}
 			</Grid.Container>

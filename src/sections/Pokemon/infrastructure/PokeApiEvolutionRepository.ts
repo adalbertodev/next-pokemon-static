@@ -29,23 +29,40 @@ export class PokeApiEvolutionRepository {
 	): Promise<PokemonEvolution> => {
 		const { chain } = pokeApiEvolution;
 
-		const evolves: PokeApiChainLink[] = [];
-
-		const getEvolve = (pokemons: PokeApiChainLink[]) => {
-			pokemons.forEach((pokemon) => {
-				evolves.push(pokemon);
-				pokemon.evolves_to.length > 0 && getEvolve(pokemon.evolves_to);
-			});
+		const evolves: PokemonEvolution = {
+			evolutionChain: [],
 		};
 
-		getEvolve(chain.evolves_to);
+		const getEvolve = async (pokemons: PokeApiChainLink[], index = 0): Promise<void> => {
+			evolves.evolutionChain[index] = {
+				pokemons: [],
+			};
+
+			await Promise.all(
+				pokemons.map(async (pokemon) => {
+					const smallPokemon: SmallPokemon = await this.processSmallPokemon(pokemon.species.name);
+
+					evolves.evolutionChain[index].pokemons.push(smallPokemon);
+
+					if (pokemon.evolves_to.length > 0) {
+						await getEvolve(pokemon.evolves_to, index + 1);
+					}
+				})
+			);
+		};
+
+		await getEvolve(chain.evolves_to);
 
 		const pokemonEvolution: PokemonEvolution = {
-			evolutions: [
-				await this.processSmallPokemon(chain.species.name),
-				...(await Promise.all(
-					evolves.map(async (evolve) => await this.processSmallPokemon(evolve.species.name))
-				)),
+			evolutionChain: [
+				{ pokemons: [await this.processSmallPokemon(chain.species.name)] },
+				...evolves.evolutionChain.map((evolutionStep) => {
+					evolutionStep.pokemons.sort((pokemonA, pokemonB) =>
+						pokemonA.name > pokemonB.name ? 1 : pokemonA.name < pokemonB.name ? -1 : 0
+					);
+
+					return evolutionStep;
+				}),
 			],
 		};
 
@@ -60,7 +77,7 @@ export class PokeApiEvolutionRepository {
 		return {
 			id: pokeApiPokemon.id,
 			name: pokeApiPokemon.name,
-			img: pokeApiPokemon.sprites.other?.dream_world.front_default ?? "",
+			img: pokeApiPokemon.sprites.other?.["official-artwork"].front_default ?? "",
 		};
 	};
 }

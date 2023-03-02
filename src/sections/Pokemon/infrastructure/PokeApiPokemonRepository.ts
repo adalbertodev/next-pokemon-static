@@ -72,7 +72,10 @@ export class PokeApiPokemonRepository implements PokemonRepository {
 			moves: await this.getAppMoves(moves),
 			stats: await this.convertToAppStats(stats),
 			sprites: {
-				default: sprites.other?.dream_world.front_default ?? null,
+				default:
+					sprites.other?.dream_world.front_default ??
+					sprites.other?.["official-artwork"].front_default ??
+					null,
 				backFemale: sprites.back_female,
 				backMale: sprites.back_default,
 				backShinyFemale: sprites.back_shiny_female,
