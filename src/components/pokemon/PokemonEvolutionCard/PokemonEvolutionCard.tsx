@@ -34,6 +34,7 @@ export const PokemonEvolutionCard: FC<Props> = ({ evolution }) => {
 									<Link href={`/pokemon/${name}`} className={styles.evolution__pokemon_link}>
 										<Image src={img} alt={name} width={120} height={120} />
 
+
 										<p className={styles.evolution__pokemon_name}>{capitalize(name)}</p>
 									</Link>
 								</Grid>

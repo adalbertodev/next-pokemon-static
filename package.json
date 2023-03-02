@@ -1,6 +1,7 @@
 {
 	"name": "pokemon-pokedex",
 	"version": "1.0.1",
+
 	"private": true,
 	"scripts": {
 		"dev": "next dev",
