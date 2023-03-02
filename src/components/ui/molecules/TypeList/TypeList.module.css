@@ -1,0 +1,29 @@
+.type_list {
+	list-style: none;
+	white-space: nowrap;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.type_list:not(:has(.linked)) {
+	gap: var(--nextui-space-3);
+}
+
+.type_container {
+	font-size: 14px;
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+}
+
+.type_list > .linked:not(:only-child):not(:last-child) > * {
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+.type_list > .linked:not(:only-child):not(:first-child) > * {
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+}

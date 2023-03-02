@@ -1,0 +1,12 @@
+:root {
+	--background: var(--nextui-colors-black);
+	--background-card: var(--nextui-colors-gray900);
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--background: var(--nextui-colors-black);
+		--background-card: var(--nextui-colors-backgroundContrast);
+		--background-navbar: var(--nextui-colors-backgroundContrast);
+	}
+}

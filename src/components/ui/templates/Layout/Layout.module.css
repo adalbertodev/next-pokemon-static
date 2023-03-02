@@ -1,0 +1,4 @@
+.container {
+	/* padding: 0 var(--nextui-space-9); */
+	background-color: var(--background);
+}

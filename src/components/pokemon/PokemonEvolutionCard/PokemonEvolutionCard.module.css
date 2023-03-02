@@ -1,0 +1,35 @@
+.container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	row-gap: var(--nextui-space-8);
+}
+
+.evolution__container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	row-gap: var(--nextui-space-8);
+}
+
+.evolution__pokemon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.evolution__pokemon_link {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.evolution__pokemon_name {
+	color: var(--nextui-colors-primary);
+}
+
+*:hover > .evolution__pokemon_name {
+	text-decoration: underline;
+}
