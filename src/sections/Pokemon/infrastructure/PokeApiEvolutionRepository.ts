@@ -51,7 +51,7 @@ export class PokeApiEvolutionRepository {
 			);
 		};
 
-		await getEvolve(chain.evolves_to);
+		chain.evolves_to.length > 0 && (await getEvolve(chain.evolves_to));
 
 		const pokemonEvolution: PokemonEvolution = {
 			evolutionChain: [

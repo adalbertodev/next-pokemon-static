@@ -21,14 +21,18 @@ export const PokemonEvolutionCard: FC<Props> = ({ evolution }) => {
 						<Grid.Container gap={0} className={styles.evolution__container}>
 							{evolutionStep.pokemons.map(({ img, name }, _, pokemons) => (
 								<Grid
-									xs={Math.max(12 / pokemons.length, 4)}
-									md={Math.max(12 / pokemons.length, 6)}
-									lg={Math.max(12 / pokemons.length, 4)}
+									{...(pokemons.length > 3
+										? {
+												xs: Math.max(12 / pokemons.length, 4),
+												md: Math.max(12 / pokemons.length, 6),
+												lg: Math.max(12 / pokemons.length, 4),
+										  }
+										: { xs: 12 })}
 									key={name}
 									className={styles.evolution__pokemon}
 								>
 									<Link href={`/pokemon/${name}`} className={styles.evolution__pokemon_link}>
-										<Image src={img} alt={name} width={150} height={150} />
+										<Image src={img} alt={name} width={120} height={120} />
 
 										<p className={styles.evolution__pokemon_name}>{capitalize(name)}</p>
 									</Link>
